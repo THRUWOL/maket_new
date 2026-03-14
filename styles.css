@@ -2914,6 +2914,151 @@ input:checked + .toggle-slider:before {
 /* ========================================
    BOTTOM NAVIGATION
    ======================================== */
+
+/* ========================================
+   EDIT MODE — РЕЖИМ РЕДАКТИРОВАНИЯ
+   ======================================== */
+
+.edit-panel {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background: var(--black);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    z-index: 999;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.edit-panel-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-panel-title {
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.edit-panel-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-panel-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.edit-panel-btn.cancel {
+    background: var(--light-gray);
+    color: var(--black);
+}
+
+.edit-panel-btn.show-all {
+    background: var(--purple);
+    color: var(--white);
+}
+
+.edit-panel-btn.save {
+    background: var(--lime);
+    color: var(--black);
+}
+
+.edit-panel-btn:hover {
+    opacity: 0.8;
+}
+
+/* Стили для блоков в режиме редактирования */
+.editable-block {
+    position: relative;
+    transition: all 0.3s;
+}
+
+.editable-block.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+.editable-block.drag-over {
+    border: 2px dashed var(--purple);
+    border-radius: var(--radius-lg);
+}
+
+.editable-block.hidden-block {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* В режиме редактирования показываем скрытые блоки */
+.edit-mode .editable-block.hidden-block {
+    display: block !important;
+    opacity: 0.4;
+    pointer-events: auto;
+    border: 2px dashed var(--metal);
+}
+
+/* Кнопка перетаскивания */
+.drag-handle {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background: var(--white);
+    border-radius: var(--radius-full);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.edit-mode .drag-handle {
+    display: flex;
+}
+
+/* Кнопка скрытия блока */
+.visibility-toggle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 32px;
+    height: 32px;
+    background: var(--white);
+    border-radius: var(--radius-full);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.visibility-toggle:hover {
+    background: var(--light-gray);
+}
+
+.edit-mode .visibility-toggle {
+    display: flex;
+}
+
+/* BOTTOM NAVIGATION */
 .bottom-nav {
     position: fixed;
     bottom: 0;

@@ -1718,6 +1718,452 @@ document.addEventListener('DOMContentLoaded', function() {
 // КОНСОЛЬНЫЕ СООБЩЕНИЯ
 // ========================================
 
+// ========================================
+// EDIT MODE — РЕЖИМ РЕДАКТИРОВАНИЯ ЭКРАНА
+// ========================================
+
+let editMode = false;
+let draggedBlock = null;
+
+// Блоки для редактирования
+const editableBlocks = [
+    { id: 'promo-banners', selector: '.promo-banners', name: 'Промо-баннеры' },
+    { id: 'balance-widget', selector: '.balance-widget', name: 'Виджет баланса' },
+    { id: 'quick-transfers', selector: '.quick-transfers-section', name: 'Быстрые переводы' },
+    { id: 'cards', selector: '.cards-section', name: 'Карты' },
+    { id: 'credits', selector: '.credits-section', name: 'Кредиты' },
+    { id: 'deposits', selector: '.deposits-section', name: 'Вклады и счета' },
+    { id: 'currency-widget', selector: '.currency-widget', name: 'Курсы валют' },
+    { id: 'useful-widget', selector: '.useful-widget', name: 'Полезное' },
+    { id: 'cta-button', selector: '.cta-button', name: 'Кнопка продукта' }
+];
+
+// Включение/выключение режима редактирования
+function toggleEditMode() {
+    editMode = !editMode;
+    
+    const editPanel = document.getElementById('edit-panel');
+    const editBtn = document.getElementById('edit-screen-btn');
+    const contentScroll = document.querySelector('.content-scroll');
+    
+    if (editMode) {
+        // Включаем режим редактирования
+        editPanel.style.display = 'block';
+        contentScroll.classList.add('edit-mode');
+        editBtn.style.background = 'var(--lime)';
+        editBtn.style.color = 'var(--black)';
+        
+        // Удаляем индикатор на время редактирования
+        const indicator = editBtn.querySelector('.notification-badge');
+        if (indicator) indicator.remove();
+        
+        // Показываем все скрытые блоки на время редактирования
+        editableBlocks.forEach(block => {
+            const element = document.querySelector(block.selector);
+            if (element && element.classList.contains('hidden-block')) {
+                element.style.display = 'block';
+            }
+        });
+        
+        // Добавляем контролы к блокам
+        setupEditableBlocks();
+        showToast('Режим редактирования включён');
+    } else {
+        // Выключаем режим редактирования
+        editPanel.style.display = 'none';
+        contentScroll.classList.remove('edit-mode');
+        editBtn.style.background = '';
+        editBtn.style.color = '';
+        
+        // Восстанавливаем видимость скрытых блоков
+        editableBlocks.forEach(block => {
+            const element = document.querySelector(block.selector);
+            if (element && element.classList.contains('hidden-block')) {
+                element.style.display = 'none';
+            }
+        });
+        
+        // Удаляем контролы
+        removeEditableControls();
+    }
+}
+
+// Настройка редактируемых блоков
+function setupEditableBlocks() {
+    editableBlocks.forEach(block => {
+        const element = document.querySelector(block.selector);
+        if (!element) return;
+        
+        // Добавляем класс для редактирования
+        element.classList.add('editable-block');
+        
+        // Добавляем кнопку перетаскивания
+        const dragHandle = document.createElement('div');
+        dragHandle.className = 'drag-handle';
+        dragHandle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="9" cy="6" r="2" fill="currentColor"/>
+                <circle cx="15" cy="6" r="2" fill="currentColor"/>
+                <circle cx="9" cy="12" r="2" fill="currentColor"/>
+                <circle cx="15" cy="12" r="2" fill="currentColor"/>
+                <circle cx="9" cy="18" r="2" fill="currentColor"/>
+                <circle cx="15" cy="18" r="2" fill="currentColor"/>
+            </svg>
+        `;
+        dragHandle.onclick = (e) => e.stopPropagation();
+        
+        // Добавляем кнопку скрытия/показа
+        const visibilityToggle = document.createElement('div');
+        visibilityToggle.className = 'visibility-toggle';
+        visibilityToggle.innerHTML = `
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M1 12C1 12 5 4 12 4C19 4 23 12 23 12C23 12 19 20 12 20C5 20 1 12 1 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        `;
+        visibilityToggle.onclick = (e) => {
+            e.stopPropagation();
+            toggleBlockVisibility(element, block.id);
+        };
+        
+        // Добавляем drag-and-drop
+        element.draggable = true;
+        element.addEventListener('dragstart', handleBlockDragStart);
+        element.addEventListener('dragend', handleBlockDragEnd);
+        element.addEventListener('dragover', handleBlockDragOver);
+        element.addEventListener('drop', handleBlockDrop);
+        element.addEventListener('dragleave', handleBlockDragLeave);
+        
+        // Touch события для мобильных
+        element.addEventListener('touchstart', handleBlockTouchStart, { passive: true });
+        element.addEventListener('touchmove', handleBlockTouchMove, { passive: true });
+        element.addEventListener('touchend', handleBlockTouchEnd);
+        
+        element.appendChild(dragHandle);
+        element.appendChild(visibilityToggle);
+    });
+}
+
+// Удаление контролов
+function removeEditableControls() {
+    editableBlocks.forEach(block => {
+        const element = document.querySelector(block.selector);
+        if (!element) return;
+        
+        element.classList.remove('editable-block');
+        element.draggable = false;
+        
+        // Удаляем обработчики
+        element.removeEventListener('dragstart', handleBlockDragStart);
+        element.removeEventListener('dragend', handleBlockDragEnd);
+        element.removeEventListener('dragover', handleBlockDragOver);
+        element.removeEventListener('drop', handleBlockDrop);
+        element.removeEventListener('dragleave', handleBlockDragLeave);
+        element.removeEventListener('touchstart', handleBlockTouchStart);
+        element.removeEventListener('touchmove', handleBlockTouchMove);
+        element.removeEventListener('touchend', handleBlockTouchEnd);
+        
+        // Удаляем контролы
+        const dragHandle = element.querySelector('.drag-handle');
+        const visibilityToggle = element.querySelector('.visibility-toggle');
+        if (dragHandle) dragHandle.remove();
+        if (visibilityToggle) visibilityToggle.remove();
+    });
+}
+
+// Переключение видимости блока
+function toggleBlockVisibility(element, blockId) {
+    const isHidden = element.classList.contains('hidden-block');
+    
+    if (isHidden) {
+        element.classList.remove('hidden-block');
+        element.style.display = 'block';
+    } else {
+        element.classList.add('hidden-block');
+        element.style.display = 'none';
+    }
+}
+
+// Drag-and-drop обработчики
+let blockTouchStartY = 0;
+
+function handleBlockDragStart(e) {
+    draggedBlock = this;
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    setTimeout(() => this.style.opacity = '0.5', 0);
+}
+
+function handleBlockDragEnd(e) {
+    this.classList.remove('dragging');
+    this.style.opacity = '';
+    document.querySelectorAll('.editable-block').forEach(block => {
+        block.classList.remove('drag-over');
+    });
+    draggedBlock = null;
+}
+
+function handleBlockDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (this !== draggedBlock) {
+        this.classList.add('drag-over');
+    }
+}
+
+function handleBlockDragLeave(e) {
+    this.classList.remove('drag-over');
+}
+
+function handleBlockDrop(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over');
+    
+    if (draggedBlock && this !== draggedBlock) {
+        // Меняем блоки местами в DOM
+        const parent = draggedBlock.parentNode;
+        const draggedNext = draggedBlock.nextSibling;
+        const thisNext = this.nextSibling;
+        
+        if (draggedNext === this) {
+            // Соседние элементы
+            parent.insertBefore(this, draggedBlock);
+        } else if (thisNext === draggedBlock) {
+            parent.insertBefore(draggedBlock, this);
+        } else {
+            parent.insertBefore(draggedBlock, thisNext);
+            parent.insertBefore(this, draggedNext);
+        }
+        
+        showToast('Блоки перемещены');
+    }
+}
+
+// Touch обработчики для мобильных
+function handleBlockTouchStart(e) {
+    draggedBlock = this;
+    blockTouchStartY = e.touches[0].clientY;
+    this.classList.add('dragging');
+}
+
+function handleBlockTouchMove(e) {
+    if (!draggedBlock) return;
+    
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const blockItem = target?.closest('.editable-block');
+    
+    document.querySelectorAll('.editable-block').forEach(block => {
+        block.classList.remove('drag-over');
+    });
+    
+    if (blockItem && blockItem !== draggedBlock) {
+        blockItem.classList.add('drag-over');
+    }
+}
+
+function handleBlockTouchEnd(e) {
+    if (!draggedBlock) return;
+    
+    const touch = e.changedTouches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    const blockItem = target?.closest('.editable-block');
+    
+    if (blockItem && blockItem !== draggedBlock) {
+        const parent = draggedBlock.parentNode;
+        const draggedNext = draggedBlock.nextSibling;
+        const thisNext = blockItem.nextSibling;
+        
+        if (draggedNext === blockItem) {
+            parent.insertBefore(blockItem, draggedBlock);
+        } else if (thisNext === draggedBlock) {
+            parent.insertBefore(draggedBlock, blockItem);
+        } else {
+            parent.insertBefore(draggedBlock, thisNext);
+            parent.insertBefore(blockItem, draggedNext);
+        }
+        
+        showToast('Блоки перемещены');
+    }
+    
+    draggedBlock.classList.remove('dragging');
+    draggedBlock = null;
+    blockTouchStartY = 0;
+    
+    document.querySelectorAll('.editable-block').forEach(block => {
+        block.classList.remove('drag-over');
+    });
+}
+
+// Отмена режима редактирования
+function cancelEditMode() {
+    toggleEditMode();
+    showToast('Изменения отменены');
+}
+
+// Показать все блоки (сбросить скрытые)
+function showAllBlocks() {
+    editableBlocks.forEach(block => {
+        const element = document.querySelector(block.selector);
+        if (element) {
+            element.classList.remove('hidden-block');
+            element.style.display = 'block';
+        }
+    });
+    
+    // Сохраняем
+    localStorage.setItem('screenLayout', JSON.stringify({
+        order: editableBlocks.map(b => b.id),
+        hidden: []
+    }));
+    
+    updateHiddenIndicator(0);
+    showToast('Все блоки показаны');
+}
+
+// Сохранение режима редактирования
+function saveEditMode() {
+    // Сохраняем порядок блоков
+    const contentScroll = document.querySelector('.content-scroll');
+    const blocks = Array.from(contentScroll.querySelectorAll('.editable-block'));
+    const order = blocks.map(block => {
+        const found = editableBlocks.find(b => b.selector === block.selector);
+        return found ? found.id : null;
+    }).filter(id => id);
+    
+    // Сохраняем скрытые блоки
+    const hidden = editableBlocks
+        .filter(block => {
+            const element = document.querySelector(block.selector);
+            return element && element.classList.contains('hidden-block');
+        })
+        .map(block => block.id);
+    
+    // Сохраняем в localStorage
+    const layout = { order, hidden };
+    localStorage.setItem('screenLayout', JSON.stringify(layout));
+    
+    // Обновляем индикатор
+    updateHiddenIndicator(hidden.length);
+    
+    toggleEditMode();
+    showToast('Макет сохранён');
+}
+
+// Обновление индикатора скрытых блоков
+function updateHiddenIndicator(count) {
+    const editBtn = document.getElementById('edit-screen-btn');
+    if (!editBtn) return;
+    
+    // Удаляем старый индикатор
+    const oldIndicator = editBtn.querySelector('.notification-badge');
+    if (oldIndicator) oldIndicator.remove();
+    
+    // Добавляем новый, если есть скрытые
+    if (count > 0) {
+        const indicator = document.createElement('span');
+        indicator.className = 'notification-badge';
+        indicator.textContent = count;
+        indicator.style.position = 'absolute';
+        indicator.style.top = '4px';
+        indicator.style.right = '4px';
+        indicator.style.width = '18px';
+        indicator.style.height = '18px';
+        indicator.style.fontSize = '10px';
+        editBtn.style.position = 'relative';
+        editBtn.appendChild(indicator);
+    }
+}
+
+// Загрузка сохранённого макета
+function loadScreenLayout() {
+    try {
+        const saved = localStorage.getItem('screenLayout');
+        if (!saved) return;
+        
+        const layout = JSON.parse(saved);
+        const contentScroll = document.querySelector('.content-scroll');
+        
+        // Восстанавливаем порядок
+        if (layout.order) {
+            layout.order.forEach(blockId => {
+                const block = editableBlocks.find(b => b.id === blockId);
+                if (block) {
+                    const element = document.querySelector(block.selector);
+                    if (element) {
+                        contentScroll.appendChild(element);
+                    }
+                }
+            });
+        }
+        
+        // Восстанавливаем скрытые блоки
+        if (layout.hidden) {
+            layout.hidden.forEach(blockId => {
+                const block = editableBlocks.find(b => b.id === blockId);
+                if (block) {
+                    const element = document.querySelector(block.selector);
+                    if (element) {
+                        element.classList.add('hidden-block');
+                        element.style.display = 'none';
+                    }
+                }
+            });
+            
+            // Показываем индикатор на кнопке редактирования
+            const editBtn = document.getElementById('edit-screen-btn');
+            if (editBtn && !editBtn.querySelector('.hidden-indicator')) {
+                const indicator = document.createElement('span');
+                indicator.className = 'notification-badge';
+                indicator.textContent = layout.hidden.length;
+                indicator.style.position = 'absolute';
+                indicator.style.top = '4px';
+                indicator.style.right = '4px';
+                indicator.style.width = '18px';
+                indicator.style.height = '18px';
+                indicator.style.fontSize = '10px';
+                editBtn.style.position = 'relative';
+                editBtn.appendChild(indicator);
+            }
+        }
+    } catch (e) {
+        console.error('Ошибка загрузки макета:', e);
+    }
+}
+
+// Загрузка при старте
+document.addEventListener('DOMContentLoaded', loadScreenLayout);
+
+// ========================================
+// ЭКСПОРТ ФУНКЦИЙ
+// ========================================
+
+window.OTPBankApp = {
+    navigateTo,
+    toggleCardNumber,
+    showToast,
+    copyCardNumber,
+    markAllAsRead,
+    // Автоплатежи
+    openAutopayOfferModal,
+    closeAutopayOfferModal,
+    setupAutopay,
+    navigateToAutopayments,
+    analyzePayment,
+    // Валюты
+    openCurrencySettings,
+    closeCurrencySettings,
+    saveCurrencySettings,
+    // Калькулятор переводов
+    openTransferCalculator,
+    closeTransferCalculator,
+    quickTransfer,
+    // Конструктор экрана
+    toggleEditMode,
+    cancelEditMode,
+    saveEditMode
+};
+
 console.log('%c ОТП Банк Онлайн ', 'background: #C1FF05; color: #000; font-size: 16px; font-weight: bold; padding: 8px 16px; border-radius: 4px;');
 console.log('%c Версия приложения: 2.0.0 (Светлая тема) ', 'color: #8C8C8C; font-size: 12px;');
 console.log('%c Дизайн основан на реальном приложении ОТП Банка ', 'color: #8C8C8C; font-size: 12px;');

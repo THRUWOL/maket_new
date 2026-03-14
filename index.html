@@ -25,6 +25,12 @@
                         </div>
                     </div>
                     <div class="header-actions">
+                        <button class="icon-btn" id="edit-screen-btn" onclick="toggleEditMode()" title="Редактировать экран">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 20H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16.5 3.5L20.5 7.5L7 21L3 21L3 17L16.5 3.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                         <button class="icon-btn" title="Поиск">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
@@ -138,7 +144,7 @@
                 </section>
 
                 <!-- Карты -->
-                <section class="products-section">
+                <section class="products-section cards-section">
                     <div class="section-header">
                         <h2 class="section-title">Карты</h2>
                         <button class="section-action" onclick="navigateTo('products-screen')">Оформить</button>
@@ -165,7 +171,7 @@
                 </section>
 
                 <!-- Кредиты -->
-                <section class="products-section">
+                <section class="products-section credits-section">
                     <div class="section-header">
                         <h2 class="section-title">Кредиты</h2>
                         <button class="section-action" onclick="navigateTo('products-screen')">Получить</button>
@@ -182,7 +188,7 @@
                 </section>
 
                 <!-- Вклады и счета -->
-                <section class="products-section">
+                <section class="products-section deposits-section">
                     <div class="section-header">
                         <h2 class="section-title">Вклады и счета</h2>
                         <button class="section-action" onclick="navigateTo('products-screen')">Открыть</button>
@@ -2155,6 +2161,18 @@
                 <span>Чаты</span>
             </button>
         </nav>
+    </div>
+
+    <!-- Плавающая панель редактирования -->
+    <div class="edit-panel" id="edit-panel" style="display: none;">
+        <div class="edit-panel-content">
+            <span class="edit-panel-title">Редактирование экрана</span>
+            <div class="edit-panel-actions">
+                <button class="edit-panel-btn show-all" onclick="showAllBlocks()" title="Показать все блоки">👁️ Все</button>
+                <button class="edit-panel-btn cancel" onclick="cancelEditMode()">Отмена</button>
+                <button class="edit-panel-btn save" onclick="saveEditMode()">Сохранить</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
