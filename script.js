@@ -290,7 +290,7 @@ function updateSelectedCount() {
 // Принятие категорий кэшбэка
 function acceptCashbackCategories() {
     showToast('Категории приняты! Кэшбэк активирован.');
-    
+
     // Анимация принятия
     const notification = document.querySelector('.cashback-notification');
     if (notification) {
@@ -298,11 +298,17 @@ function acceptCashbackCategories() {
         notification.querySelector('.notification-title').textContent = '✅ Категории приняты!';
         notification.querySelector('.notification-text').textContent = 'Кэшбэк активирован до 30 апреля';
     }
-    
+
     // Скрываем кнопки действий
     const actions = document.querySelector('.cashback-actions');
     if (actions) {
         actions.style.display = 'none';
+    }
+    
+    // Скрываем иконку предупреждения на главном экране
+    const cashbackAlertBtn = document.querySelector('.cashback-alert-btn');
+    if (cashbackAlertBtn) {
+        cashbackAlertBtn.style.display = 'none';
     }
 }
 
@@ -310,21 +316,128 @@ function acceptCashbackCategories() {
 function saveCashbackCategories() {
     const checkboxes = document.querySelectorAll('.category-selection-item input[type="checkbox"]');
     const selected = Array.from(checkboxes).filter(cb => cb.checked);
-    
+
     if (selected.length < 3) {
         showToast('Выберите минимум 3 категории');
         return;
     }
-    
+
     if (selected.length > 5) {
         showToast('Максимум 5 категорий');
         return;
     }
-    
+
     closeCashbackSettings();
     showToast('Категории сохранены!');
-    
+
     // Здесь будет логика сохранения на бэкенд
+}
+
+// Данные для деталей кэшбэка по категориям
+const cashbackDetailsData = {
+    restaurants: {
+        title: 'Рестораны и кафе',
+        icon: '🍔',
+        percent: '5%',
+        spent: '12 450 ₽',
+        earned: '~620 ₽',
+        transactions: '24',
+        description: 'Кэшбэк начисляется за оплату в ресторанах, кафе, закусочных и других заведениях общественного питания.',
+        includes: [
+            'Рестораны быстрого питания (фастфуд)',
+            'Кафе и столовые',
+            'Бары и кофейни',
+            'Пиццерии и суши-бары',
+            'Доставка еды из ресторанов'
+        ],
+        excludes: [
+            'Покупка продуктов в супермаркетах',
+            'Кейтеринговые услуги'
+        ]
+    },
+    taxi: {
+        title: 'Такси',
+        icon: '🚕',
+        percent: '5%',
+        spent: '5 670 ₽',
+        earned: '~280 ₽',
+        transactions: '18',
+        description: 'Кэшбэк начисляется за поездки в такси, оформленные через приложения и сервисы.',
+        includes: [
+            'Яндекс Такси',
+            'Uber',
+            'Ситимобил',
+            'Такси Везёт',
+            'Другие агрегаторы такси'
+        ],
+        excludes: [
+            'Оплата наличными водителю',
+            'Грузовое такси',
+            'Аренда автомобиля'
+        ]
+    },
+    supermarkets: {
+        title: 'Супермаркеты',
+        icon: '🛒',
+        percent: '3%',
+        spent: '28 900 ₽',
+        earned: '~870 ₽',
+        transactions: '42',
+        description: 'Кэшбэк начисляется за покупки в супермаркетах, продуктовых магазинах и универсамах.',
+        includes: [
+            'Пятёрочка',
+            'Магнит',
+            'Перекрёсток',
+            'Лента',
+            'Азбука Вкуса',
+            'Дикси'
+        ],
+        excludes: [
+            'Заказ продуктов онлайн (СберМаркет, Самокат)',
+            'Рестораны при супермаркетах',
+            'Оплата подарочными картами'
+        ]
+    }
+};
+
+// Открытие модального окна деталей кэшбэка
+function openCashbackDetailModal(category) {
+    const data = cashbackDetailsData[category];
+    if (!data) return;
+
+    document.getElementById('cashback-detail-title').textContent = data.title;
+    document.getElementById('cashback-detail-icon').textContent = data.icon;
+    document.getElementById('cashback-detail-percent').textContent = data.percent;
+    document.getElementById('cashback-detail-spent').textContent = data.spent;
+    document.getElementById('cashback-detail-earned').textContent = data.earned;
+    document.getElementById('cashback-detail-transactions').textContent = data.transactions;
+
+    // Формируем описание
+    let descriptionHtml = `<p>${data.description}</p>`;
+    
+    if (data.includes && data.includes.length > 0) {
+        descriptionHtml += '<p><strong>Что входит:</strong></p><ul>';
+        data.includes.forEach(item => {
+            descriptionHtml += `<li>${item}</li>`;
+        });
+        descriptionHtml += '</ul>';
+    }
+    
+    if (data.excludes && data.excludes.length > 0) {
+        descriptionHtml += '<p><strong>Не входит:</strong></p><ul>';
+        data.excludes.forEach(item => {
+            descriptionHtml += `<li>${item}</li>`;
+        });
+        descriptionHtml += '</ul>';
+    }
+
+    document.getElementById('cashback-detail-description').innerHTML = descriptionHtml;
+    document.getElementById('cashback-detail-modal').classList.add('active');
+}
+
+// Закрытие модального окна деталей кэшбэка
+function closeCashbackDetailModal() {
+    document.getElementById('cashback-detail-modal').classList.remove('active');
 }
 
 // Добавляем обработчики на чекбоксы
@@ -843,6 +956,673 @@ async function copyCardNumber() {
 }
 
 // ========================================
+// АВТОПЛАТЕЖИ — ФУНКЦИИ
+// ========================================
+
+// Данные для автоплатежей
+let currentAutopayOffer = null;
+
+// Данные истории платежей для анализа
+const paymentHistoryData = [
+    {
+        id: 1,
+        recipient: 'ЖКХ Услуги',
+        category: 'utilities',
+        mcc: '4900',
+        payments: [
+            { date: '2026-02-13', amount: 6800 },
+            { date: '2026-01-15', amount: 6800 },
+            { date: '2025-12-15', amount: 6500 },
+            { date: '2025-11-15', amount: 6500 },
+            { date: '2025-10-15', amount: 6200 },
+            { date: '2025-09-15', amount: 6200 },
+            { date: '2025-08-15', amount: 5800 },
+            { date: '2025-07-15', amount: 5800 },
+            { date: '2025-06-15', amount: 5800 },
+            { date: '2025-05-15', amount: 5800 },
+            { date: '2025-04-15', amount: 5800 },
+            { date: '2025-03-15', amount: 5800 }
+        ]
+    },
+    {
+        id: 2,
+        recipient: 'Дом.ру Интернет',
+        category: 'internet',
+        mcc: '4899',
+        payments: [
+            { date: '2026-03-05', amount: 550 },
+            { date: '2026-02-05', amount: 550 },
+            { date: '2026-01-05', amount: 550 },
+            { date: '2025-12-05', amount: 550 },
+            { date: '2025-11-05', amount: 550 }
+        ]
+    },
+    {
+        id: 3,
+        recipient: 'МТС Мобильная связь',
+        category: 'telecom',
+        mcc: '4814',
+        payments: [
+            { date: '2026-03-10', amount: 350 },
+            { date: '2026-02-10', amount: 350 },
+            { date: '2026-01-10', amount: 350 },
+            { date: '2025-12-10', amount: 350 }
+        ]
+    },
+    {
+        id: 4,
+        recipient: 'Яндекс Плюс',
+        category: 'subscription',
+        mcc: '5818',
+        payments: [
+            { date: '2026-03-25', amount: 299 },
+            { date: '2026-02-25', amount: 299 },
+            { date: '2026-01-25', amount: 299 }
+        ]
+    },
+    {
+        id: 5,
+        recipient: 'Папа',
+        category: 'transfer',
+        mcc: null,
+        payments: [
+            { date: '2026-03-08', amount: 5000 },
+            { date: '2026-02-23', amount: 5000 },
+            { date: '2026-02-10', amount: 3000 }
+        ]
+    },
+    {
+        id: 6,
+        recipient: 'Билайн Интернет',
+        category: 'internet',
+        mcc: '4899',
+        payments: [
+            { date: '2026-03-01', amount: 450 }
+        ]
+    },
+    {
+        id: 7,
+        recipient: 'Мама',
+        category: 'transfer',
+        mcc: null,
+        payments: [
+            { date: '2026-03-12', amount: 10000 }
+        ]
+    }
+];
+
+// Анализ платежа и определение типа
+function analyzePayment(recipient, amount) {
+    const history = paymentHistoryData.find(h => h.recipient === recipient);
+    
+    if (!history) {
+        // Первый платёж новому получателю
+        return {
+            type: 'first',
+            showOffer: true,
+            variant: 'before',
+            title: 'Настроить автоплатёж?',
+            description: 'Вы впервые платите этому получателю. Хотите настроить автоплатёж, чтобы не вводить данные каждый раз?',
+            recipient: recipient,
+            amount: amount,
+            frequency: '—',
+            count: 1
+        };
+    }
+    
+    const paymentsCount = history.payments.length;
+    const avgAmount = history.payments.reduce((sum, p) => sum + p.amount, 0) / paymentsCount;
+    
+    // Проверка на ЖКХ/интернет по MCC коду
+    const isUtility = ['4900', '4901', '4814', '4899'].includes(history.mcc);
+    const isSubscription = history.mcc === '5818';
+    
+    if (isUtility || isSubscription) {
+        // ЖКХ/интернет/подписка — всегда предлагаем после первого
+        return {
+            type: 'utility',
+            showOffer: paymentsCount >= 1,
+            variant: 'after',
+            title: 'Настроить автоплатёж?',
+            description: `Вы регулярно платите за ${recipient.toLowerCase()}. Настройте автоплатёж, чтобы не беспокоиться о своевременной оплате.`,
+            recipient: recipient,
+            amount: Math.round(avgAmount).toLocaleString('ru-RU'),
+            frequency: 'Раз в месяц',
+            count: paymentsCount
+        };
+    }
+    
+    if (paymentsCount >= 3) {
+        // Регулярный платёж (3+)
+        // Проверяем интервалы между платежами
+        const dates = history.payments.map(p => new Date(p.date));
+        const intervals = [];
+        for (let i = 1; i < dates.length; i++) {
+            const diff = Math.abs(dates[i] - dates[i-1]) / (1000 * 60 * 60 * 24);
+            intervals.push(diff);
+        }
+        const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+        
+        // Интервал 25-35 дней = ежемесячный
+        const isMonthly = avgInterval >= 25 && avgInterval <= 35;
+        
+        return {
+            type: 'regular',
+            showOffer: true,
+            variant: 'after',
+            title: 'Настроить автоплатёж?',
+            description: `Мы заметили, что вы платите ${recipient.toLowerCase()} примерно раз в ${Math.round(avgInterval)} дней. Хотите автоматизировать этот процесс?`,
+            recipient: recipient,
+            amount: Math.round(avgAmount).toLocaleString('ru-RU'),
+            frequency: `Раз в ${Math.round(avgInterval)} дней`,
+            count: paymentsCount
+        };
+    }
+    
+    if (paymentsCount >= 2) {
+        // Повторный платёж (2-3)
+        return {
+            type: 'repeat',
+            showOffer: true,
+            variant: 'after',
+            title: 'Настроить автоплатёж?',
+            description: `Вы уже второй раз платите ${recipient.toLowerCase()}. Может, стоит настроить автоплатёж?`,
+            recipient: recipient,
+            amount: Math.round(avgAmount).toLocaleString('ru-RU'),
+            frequency: '—',
+            count: paymentsCount
+        };
+    }
+    
+    return {
+        type: 'unknown',
+        showOffer: false,
+        variant: null
+    };
+}
+
+// Открытие модального окна предложения автоплатежа
+function openAutopayOfferModal(recipient, amount) {
+    const analysis = analyzePayment(recipient, amount);
+    
+    if (!analysis.showOffer) {
+        return;
+    }
+    
+    currentAutopayOffer = analysis;
+    
+    document.getElementById('autopay-offer-title').textContent = analysis.title;
+    document.getElementById('autopay-offer-description').textContent = analysis.description;
+    document.getElementById('autopay-recipient').textContent = analysis.recipient;
+    document.getElementById('autopay-amount').textContent = `${analysis.amount} ₽`;
+    document.getElementById('autopay-frequency').textContent = analysis.frequency;
+    document.getElementById('autopay-count').textContent = analysis.count;
+    
+    document.getElementById('autopay-offer-modal').classList.add('active');
+}
+
+// Закрытие модального окна предложения
+function closeAutopayOfferModal() {
+    document.getElementById('autopay-offer-modal').classList.remove('active');
+    currentAutopayOffer = null;
+}
+
+// Переход к настройке автоплатежа
+function setupAutopay() {
+    if (!currentAutopayOffer) return;
+    
+    document.getElementById('setup-recipient').value = currentAutopayOffer.recipient;
+    document.getElementById('setup-amount').value = currentAutopayOffer.amount.replace(/\s/g, '');
+    
+    closeAutopayOfferModal();
+    document.getElementById('autopay-setup-modal').classList.add('active');
+}
+
+// Закрытие модального окна настройки
+function closeAutopaySetupModal() {
+    document.getElementById('autopay-setup-modal').classList.remove('active');
+}
+
+// Переключение опций частоты
+function toggleFrequencyOptions() {
+    const frequency = document.getElementById('setup-frequency').value;
+    const customBlock = document.getElementById('custom-frequency-block');
+    const dateSelect = document.getElementById('setup-date');
+    
+    if (frequency === 'custom') {
+        customBlock.style.display = 'flex';
+        dateSelect.disabled = true;
+    } else if (frequency === 'yearly') {
+        customBlock.style.display = 'none';
+        dateSelect.disabled = false;
+        // Для yearly ограничиваем выбор месяца
+        dateSelect.innerHTML = `
+            <option value="1">Январь</option>
+            <option value="2">Февраль</option>
+            <option value="3">Март</option>
+            <option value="4">Апрель</option>
+            <option value="5">Май</option>
+            <option value="6">Июнь</option>
+            <option value="7">Июль</option>
+            <option value="8">Август</option>
+            <option value="9">Сентябрь</option>
+            <option value="10">Октябрь</option>
+            <option value="11">Ноябрь</option>
+            <option value="12">Декабрь</option>
+        `;
+    } else {
+        customBlock.style.display = 'none';
+        dateSelect.disabled = false;
+        // Восстанавливаем обычный список
+        dateSelect.innerHTML = `
+            <option value="1">1 число каждого месяца</option>
+            <option value="5">5 число каждого месяца</option>
+            <option value="10">10 число каждого месяца</option>
+            <option value="15">15 число каждого месяца</option>
+            <option value="20">20 число каждого месяца</option>
+            <option value="25">25 число каждого месяца</option>
+            <option value="last">Последний день месяца</option>
+        `;
+    }
+}
+
+// Подтверждение настройки автоплатежа
+function confirmAutopaySetup() {
+    const recipient = document.getElementById('setup-recipient').value;
+    const amount = document.getElementById('setup-amount').value;
+    const frequency = document.getElementById('setup-frequency').value;
+    const date = document.getElementById('setup-date').value;
+    const account = document.getElementById('setup-account').value;
+    const notify = document.getElementById('setup-notify').checked;
+    const confirm = document.getElementById('setup-confirm').checked;
+    const insufficient = document.getElementById('setup-insufficient').checked;
+    const limit = document.getElementById('setup-limit').value;
+    const startDate = document.getElementById('setup-start-date').value;
+    const endDate = document.getElementById('setup-end-date').value;
+    const customInterval = document.getElementById('setup-custom-interval').value;
+
+    // Получаем текст периодичности
+    const frequencyTexts = {
+        monthly: 'Ежемесячно',
+        quarterly: 'Раз в квартал',
+        yearly: 'Раз в год',
+        custom: `Раз в ${customInterval || 30} дней`
+    };
+    const frequencyText = frequencyTexts[frequency] || 'Ежемесячно';
+
+    // Получаем текст даты
+    let dateText;
+    if (frequency === 'yearly') {
+        const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+                       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        dateText = months[parseInt(date) - 1] || '';
+    } else {
+        dateText = date === 'last' ? 'Последний день' : `${date} число`;
+    }
+
+    // Добавляем новый автоплатёж в список
+    const autopaymentsList = document.getElementById('autopayments-list');
+    const newAutopayment = document.createElement('div');
+    newAutopayment.className = 'autopayment-item';
+    newAutopayment.dataset.id = Date.now();
+
+    const amountFormatted = parseInt(amount).toLocaleString('ru-RU');
+    const limitInfo = limit ? ` (лимит ${parseInt(limit).toLocaleString('ru-RU')} ₽)` : '';
+
+    newAutopayment.innerHTML = `
+        <div class="autopayment-icon utilities-bg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 6V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="autopayment-info">
+            <span class="autopayment-name">${recipient}</span>
+            <span class="autopayment-details">${frequencyText}, ${dateText} • ${amountFormatted} ₽${limitInfo}</span>
+        </div>
+        <div class="autopayment-status">
+            <span class="status-badge active">Активен</span>
+            <button class="autopayment-menu" onclick="openAutopayMenu(${newAutopayment.dataset.id})">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                    <circle cx="19" cy="12" r="1" fill="currentColor"/>
+                    <circle cx="5" cy="12" r="1" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    autopaymentsList.insertBefore(newAutopayment, autopaymentsList.firstChild);
+
+    // Обновляем сводку
+    updateAutopaymentsSummary();
+
+    closeAutopaySetupModal();
+    showToast(`✅ Автоплатёж "${recipient}" создан`);
+}
+
+// Открытие меню автоплатежа
+function openAutopayMenu(id) {
+    const action = confirm('Управление автоплатёжом:\n\nOK — Приостановить/Возобновить\nОтмена — Удалить');
+    
+    if (action) {
+        const item = document.querySelector(`.autopayment-item[data-id="${id}"]`);
+        if (item) {
+            const badge = item.querySelector('.status-badge');
+            if (badge.classList.contains('active')) {
+                badge.classList.remove('active');
+                badge.classList.add('paused');
+                badge.textContent = 'На паузе';
+                showToast('Автоплатёж приостановлен');
+            } else if (badge.classList.contains('paused')) {
+                badge.classList.remove('paused');
+                badge.classList.add('active');
+                badge.textContent = 'Активен';
+                showToast('Автоплатёж возобновлён');
+            }
+        }
+    } else {
+        const shouldDelete = confirm('Вы действительно хотите удалить этот автоплатёж?');
+        if (shouldDelete) {
+            const item = document.querySelector(`.autopayment-item[data-id="${id}"]`);
+            if (item) {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    item.remove();
+                    updateAutopaymentsSummary();
+                }, 300);
+                showToast('Автоплатёж удалён');
+            }
+        }
+    }
+}
+
+// Открытие модального окна добавления автоплатежа
+function openAddAutopayModal() {
+    document.getElementById('setup-recipient').value = '';
+    document.getElementById('setup-amount').value = '';
+    document.getElementById('autopay-setup-modal').classList.add('active');
+}
+
+// Обновление сводки автоплатежей
+function updateAutopaymentsSummary() {
+    const activeItems = document.querySelectorAll('.autopayment-item .status-badge.active');
+    const monthlyAmount = Array.from(activeItems).reduce((sum, item) => {
+        const details = item.querySelector('.autopayment-details');
+        if (details) {
+            const match = details.textContent.match(/([\d\s]+) ₽/);
+            if (match) {
+                return sum + parseInt(match[1].replace(/\s/g, ''));
+            }
+        }
+        return sum;
+    }, 0);
+    
+    document.getElementById('active-autopayments-count').textContent = activeItems.length;
+    document.getElementById('monthly-autopayments-amount').textContent = `${monthlyAmount.toLocaleString('ru-RU')} ₽`;
+}
+
+// Навигация к экрану автоплатежей
+function navigateToAutopayments() {
+    navigateTo('autopayments-screen');
+}
+
+// ========================================
+// НАСТРОЙКА ВАЛЮТ — ФУНКЦИИ
+// ========================================
+
+// Данные о курсах валют
+const currencyRatesData = {
+    USD: { flag: '🇺🇸', name: 'Доллар США', buy: 73.50, sell: 87.50 },
+    EUR: { flag: '🇪🇺', name: 'Евро', buy: 88.50, sell: 96.50 },
+    CNY: { flag: '🇨🇳', name: 'Китайский юань', buy: 11.10, sell: 12.30 },
+    GBP: { flag: '🇬🇧', name: 'Британский фунт', buy: 92.00, sell: 102.00 },
+    TRY: { flag: '🇹🇷', name: 'Турецкая лира', buy: 2.10, sell: 2.80 },
+    KZT: { flag: '🇰🇿', name: 'Казахский тенге', buy: 0.15, sell: 0.22 },
+    BYN: { flag: '🇧🇾', name: 'Белорусский рубль', buy: 22.50, sell: 26.00 },
+    AED: { flag: '🇦🇪', name: 'Дирхам ОАЭ', buy: 20.00, sell: 24.00 },
+    THB: { flag: '🇹🇭', name: 'Тайский бат', buy: 2.20, sell: 2.90 },
+    INR: { flag: '🇮🇳', name: 'Индийская рупия', buy: 0.85, sell: 1.10 }
+};
+
+// Сохранённые валюты пользователя
+let userCurrencies = ['USD', 'EUR', 'CNY'];
+
+// Открытие настройки валют
+function openCurrencySettings() {
+    const modal = document.getElementById('currency-settings-modal');
+    const checkboxes = modal.querySelectorAll('.currency-selection-item input[type="checkbox"]');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = userCurrencies.includes(checkbox.value);
+    });
+    
+    modal.classList.add('active');
+}
+
+// Закрытие настройки валют
+function closeCurrencySettings() {
+    document.getElementById('currency-settings-modal').classList.remove('active');
+}
+
+// Сохранение настроек валют
+function saveCurrencySettings() {
+    const checkboxes = document.querySelectorAll('#currency-selection-list input[type="checkbox"]');
+    const selectedCurrencies = [];
+    
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedCurrencies.push(checkbox.value);
+        }
+    });
+    
+    if (selectedCurrencies.length === 0) {
+        showToast('Выберите хотя бы одну валюту');
+        return;
+    }
+    
+    userCurrencies = selectedCurrencies;
+    updateCurrencyWidget();
+    closeCurrencySettings();
+    showToast('Настройки валют сохранены');
+}
+
+// Обновление виджета валют
+function updateCurrencyWidget() {
+    const currencyList = document.getElementById('currency-list');
+    if (!currencyList) return;
+    
+    // Очищаем текущий список
+    currencyList.innerHTML = '';
+    
+    // Добавляем выбранные валюты
+    userCurrencies.forEach(currencyCode => {
+        const currency = currencyRatesData[currencyCode];
+        if (currency) {
+            const currencyItem = document.createElement('div');
+            currencyItem.className = 'currency-item';
+            currencyItem.dataset.currency = currencyCode;
+            currencyItem.innerHTML = `
+                <div class="currency-flag">${currency.flag}</div>
+                <span class="currency-code">${currencyCode}</span>
+                <div class="currency-rates">
+                    <span class="currency-rate">${currency.buy.toFixed(2)}</span>
+                    <span class="currency-rate">${currency.sell.toFixed(2)}</span>
+                </div>
+            `;
+            currencyList.appendChild(currencyItem);
+        }
+    });
+}
+
+// ========================================
+// КАЛЬКУЛЯТОР ДЛЯ ПЕРЕВОДОВ — ФУНКЦИИ
+// ========================================
+
+let calculatorBuffer = [];
+let currentInput = '0';
+
+// Открытие калькулятора для перевода
+function openTransferCalculator(favoriteName, favoritePhone, favoriteBank) {
+    calculatorBuffer = [];
+    currentInput = '0';
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay active';
+    modal.id = 'transfer-calculator-modal';
+    modal.innerHTML = `
+        <div class="modal-content transfer-calculator-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Перевод ${favoriteName}</h2>
+                <button class="modal-close" onclick="closeTransferCalculator()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="calculator-recipient">
+                    <span class="recipient-name">${favoriteName}</span>
+                    <span class="recipient-details">${favoriteBank}</span>
+                </div>
+                
+                <div class="calculator-display">
+                    <div class="display-expression" id="calc-expression"></div>
+                    <div class="display-result" id="calc-result">0 ₽</div>
+                </div>
+                
+                <div class="calculator-buttons">
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('7')">7</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('8')">8</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('9')">9</button>
+                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('+')">+</button>
+                    
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('4')">4</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('5')">5</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('6')">6</button>
+                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('-')">−</button>
+                    
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('1')">1</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('2')">2</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('3')">3</button>
+                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('*')">×</button>
+                    
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('0')">0</button>
+                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('00')">00</button>
+                    <button class="calc-btn calc-btn-clear" onclick="calculatorInput('C')">C</button>
+                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('/')">÷</button>
+                    
+                    <button class="calc-btn calc-btn-equals" onclick="calculateResult()">=</button>
+                </div>
+                
+                <div class="transfer-quick-amounts">
+                    <button class="quick-amount-btn" onclick="addAmount(100)">+100</button>
+                    <button class="quick-amount-btn" onclick="addAmount(500)">+500</button>
+                    <button class="quick-amount-btn" onclick="addAmount(1000)">+1000</button>
+                    <button class="quick-amount-btn" onclick="addAmount(5000)">+5000</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeTransferCalculator()">Отмена</button>
+                <button class="btn-primary" onclick="confirmTransfer('${favoriteName}', '${favoritePhone}', '${favoriteBank}')">Перевести</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Закрытие калькулятора
+function closeTransferCalculator() {
+    const modal = document.getElementById('transfer-calculator-modal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// Ввод значения в калькулятор
+function calculatorInput(value) {
+    const expressionEl = document.getElementById('calc-expression');
+    const resultEl = document.getElementById('calc-result');
+    
+    if (value === 'C') {
+        calculatorBuffer = [];
+        currentInput = '0';
+        expressionEl.textContent = '';
+        resultEl.textContent = '0 ₽';
+        return;
+    }
+    
+    if (['+', '-', '*', '/'].includes(value)) {
+        if (currentInput !== '0') {
+            calculatorBuffer.push(currentInput);
+            calculatorBuffer.push(value);
+            currentInput = '0';
+        } else if (calculatorBuffer.length > 0) {
+            calculatorBuffer[calculatorBuffer.length - 1] = value;
+        }
+        expressionEl.textContent = calculatorBuffer.join(' ');
+    } else {
+        if (currentInput === '0') {
+            currentInput = value;
+        } else {
+            currentInput += value;
+        }
+        resultEl.textContent = `${parseInt(currentInput).toLocaleString('ru-RU')} ₽`;
+    }
+}
+
+// Быстрое добавление суммы
+function addAmount(amount) {
+    calculatorInput(amount.toString());
+}
+
+// Вычисление результата
+function calculateResult() {
+    const expressionEl = document.getElementById('calc-expression');
+    const resultEl = document.getElementById('calc-result');
+    
+    if (currentInput !== '0') {
+        calculatorBuffer.push(currentInput);
+    }
+    
+    if (calculatorBuffer.length === 0) return;
+    
+    const expression = calculatorBuffer.join(' ');
+    expressionEl.textContent = expression + ' =';
+    
+    try {
+        // Безопасное вычисление
+        const result = eval(expression.replace(/[^0-9+\-*/.]/g, ''));
+        currentInput = Math.round(result).toString();
+        resultEl.textContent = `${Math.round(result).toLocaleString('ru-RU')} ₽`;
+    } catch (e) {
+        resultEl.textContent = 'Ошибка';
+        currentInput = '0';
+    }
+    
+    calculatorBuffer = [];
+}
+
+// Подтверждение перевода
+function confirmTransfer(name, phone, bank) {
+    const resultEl = document.getElementById('calc-result');
+    const amountText = resultEl.textContent.replace(/[^0-9]/g, '');
+    const amount = parseInt(amountText);
+    
+    if (!amount || amount <= 0) {
+        showToast('Введите сумму перевода');
+        return;
+    }
+    
+    closeTransferCalculator();
+    showToast(`✅ Перевод ${amount.toLocaleString('ru-RU')} ₽ → ${name}`);
+}
+
+// Обновлённая функция quickTransfer для открытия калькулятора
+function quickTransfer(name, phone, bank) {
+    closeFavoritesModal();
+    openTransferCalculator(name, phone, bank);
+}
+
+// ========================================
 // PULL TO REFRESH (имитация)
 // ========================================
 
@@ -886,8 +1666,53 @@ window.OTPBankApp = {
     toggleCardNumber,
     showToast,
     copyCardNumber,
-    markAllAsRead
+    markAllAsRead,
+    // Автоплатежи
+    openAutopayOfferModal,
+    closeAutopayOfferModal,
+    setupAutopay,
+    navigateToAutopayments,
+    analyzePayment,
+    // Валюты
+    openCurrencySettings,
+    closeCurrencySettings,
+    saveCurrencySettings,
+    // Калькулятор переводов
+    openTransferCalculator,
+    closeTransferCalculator,
+    quickTransfer
 };
+
+// ========================================
+// ИНТЕГРАЦИЯ АВТОПЛАТЕЖЕЙ С ТРАНЗАКЦИЯМИ
+// ========================================
+
+// Добавляем обработчик на транзакции для предложения автоплатежа
+document.addEventListener('DOMContentLoaded', function() {
+    // Находим все транзакции и добавляем возможность предложения автоплатежа
+    const transactionItems = document.querySelectorAll('.transaction-item');
+    
+    transactionItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const merchant = this.querySelector('.transaction-merchant');
+            const amount = this.querySelector('.amount-value');
+            
+            if (merchant && amount) {
+                const merchantName = merchant.textContent;
+                const amountText = amount.textContent.replace(/[^0-9]/g, '');
+                const amountValue = parseInt(amountText) || 1000;
+                
+                // Проверяем, не является ли это доходом
+                if (!amount.classList.contains('positive')) {
+                    // Показываем предложение автоплатежа после просмотра транзакции
+                    setTimeout(() => {
+                        openAutopayOfferModal(merchantName, amountValue);
+                    }, 500);
+                }
+            }
+        });
+    });
+});
 
 // ========================================
 // КОНСОЛЬНЫЕ СООБЩЕНИЯ

@@ -512,6 +512,107 @@
     background: #E63E3E;
 }
 
+/* Детали кэшбэка */
+.cashback-detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cashback-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: var(--lime-gradient);
+    border-radius: var(--radius-lg);
+}
+
+.cashback-detail-icon {
+    font-size: 48px;
+}
+
+.cashback-detail-percent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.percent-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.percent-label {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.cashback-detail-description {
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.cashback-detail-description p {
+    font-size: 14px;
+    color: var(--dark-gray);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.cashback-detail-description p:last-child {
+    margin-bottom: 0;
+}
+
+.cashback-detail-description strong {
+    color: var(--black);
+    font-weight: 600;
+}
+
+.cashback-detail-description ul {
+    margin: 8px 0 16px 20px;
+    padding: 0;
+}
+
+.cashback-detail-description li {
+    font-size: 13px;
+    color: var(--dark-gray);
+    line-height: 1.5;
+    margin-bottom: 4px;
+}
+
+.cashback-detail-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detail-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.stat-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.stat-value.cashback {
+    color: var(--purple);
+}
+
 /* Отмена подписки */
 .cancel-warning {
     display: flex;
@@ -679,10 +780,42 @@
     color: var(--black);
 }
 
+.category-percent-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .category-percent {
     font-size: 18px;
     font-weight: 700;
     color: var(--purple);
+}
+
+.category-info-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    padding: 0;
+}
+
+.category-info-btn:hover {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: var(--white);
+}
+
+.category-info-btn svg {
+    width: 14px;
+    height: 14px;
 }
 
 .category-stats {
@@ -1483,20 +1616,50 @@ body {
     border-radius: var(--radius-lg);
     padding: 16px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s;
     min-height: 80px;
+    gap: 4px;
 }
 
 .referral-mini:hover {
     transform: translateY(-2px);
 }
 
+.cashback-mini-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .referral-mini-title {
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--black);
+    opacity: 0.8;
+}
+
+.cashback-alert-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.cashback-alert-btn:hover {
+    transform: scale(1.1);
+}
+
+.cashback-amount {
+    font-size: 20px;
     font-weight: 700;
     color: var(--black);
 }
@@ -1581,6 +1744,30 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+}
+
+.section-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn-sm {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: var(--light-gray);
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.icon-btn-sm:hover {
+    background: #E8E8E8;
 }
 
 .section-title {
@@ -2789,6 +2976,529 @@ input:checked + .toggle-slider:before {
 
 .widget {
     animation: fadeIn 0.4s ease-out;
+}
+
+/* ========================================
+   AUTOPLAYMENTS — АВТОПЛАТЕЖИ
+   ======================================== */
+
+/* Модальное окно предложения */
+.autopay-offer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.autopay-offer-icon {
+    display: flex;
+    justify-content: center;
+}
+
+.autopay-offer-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black);
+    text-align: center;
+    margin: 0;
+}
+
+.autopay-offer-description {
+    font-size: 14px;
+    color: var(--gray);
+    text-align: center;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.autopay-offer-details {
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.autopay-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.autopay-detail-row .detail-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.autopay-detail-row .detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.autopay-benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.benefit-item span {
+    font-size: 14px;
+    color: var(--dark-gray);
+}
+
+/* Модальное окно настройки */
+.autopay-setup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.autopay-label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.autopay-label.checkbox-label {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+}
+
+.autopay-label .label-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+}
+
+.autopay-input {
+    padding: 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-family: var(--font-primary);
+    background: var(--white);
+}
+
+.autopay-input:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+.autopay-input:read-only {
+    background: var(--light-gray);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.checkbox-label .checkbox-text {
+    font-size: 14px;
+    color: var(--dark-gray);
+    flex: 1;
+}
+
+.autopay-advanced-settings {
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-top: 8px;
+}
+
+.advanced-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 12px;
+}
+
+.label-hint {
+    font-size: 12px;
+    color: var(--gray);
+    margin-top: 4px;
+    display: block;
+}
+
+/* Экран автоплатежей */
+.autopayments-summary {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.summary-item {
+    background: var(--purple-gradient);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.summary-icon {
+    font-size: 32px;
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.summary-label {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.autopayments-alert {
+    background: #FFF3CD;
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.autopayments-alert .alert-icon {
+    color: var(--orange);
+}
+
+.autopayments-alert .alert-text {
+    font-size: 14px;
+    color: var(--black);
+    flex: 1;
+}
+
+/* Список автоплатежей */
+.autopayments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.autopayment-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.autopayment-item:hover {
+    background: #E8E8E8;
+    transform: translateX(4px);
+}
+
+.autopayment-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+.utilities-bg { background: #4A9FE8; }
+.internet-bg { background: #9E6FC3; }
+.phone-bg { background: #FF7D32; }
+.subscription-bg { background: #C1FF05; color: var(--black); }
+
+.autopayment-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.autopayment-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.autopayment-details {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.autopayment-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-badge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+}
+
+.status-badge.active {
+    background: #D4EDDA;
+    color: #155724;
+}
+
+.status-badge.paused {
+    background: #E2E3E5;
+    color: #383D41;
+}
+
+.status-badge.disabled {
+    background: #F8D7DA;
+    color: #721C24;
+}
+
+.autopayment-menu {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.autopayment-menu:hover {
+    background: var(--white);
+    color: var(--black);
+}
+
+.add-autopayment-btn {
+    width: 100%;
+    padding: 16px;
+    border: 2px dashed var(--border);
+    background: transparent;
+    color: var(--purple);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.add-autopayment-btn:hover {
+    background: rgba(158, 111, 195, 0.1);
+    border-color: var(--purple);
+}
+
+/* ========================================
+   CURRENCY SETTINGS — НАСТРОЙКА ВАЛЮТ
+   ======================================== */
+
+.currency-selection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.currency-selection-item {
+    display: block;
+    cursor: pointer;
+}
+
+.currency-selection-item input[type="checkbox"] {
+    display: none;
+}
+
+.currency-selection-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    transition: background 0.2s, border-color 0.2s;
+    border: 2px solid transparent;
+}
+
+.currency-selection-item:hover .currency-selection-content {
+    background: #E8E8E8;
+}
+
+.currency-selection-item input[type="checkbox"]:checked + .currency-selection-content {
+    background: rgba(158, 111, 195, 0.15);
+    border-color: var(--purple);
+}
+
+.currency-selection-flag {
+    font-size: 24px;
+}
+
+.currency-selection-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--black);
+}
+
+/* ========================================
+   TRANSFER CALCULATOR — КАЛЬКУЛЯТОР ПЕРЕВОДОВ
+   ======================================== */
+
+.transfer-calculator-content .modal-body {
+    padding: 16px;
+}
+
+.calculator-recipient {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.calculator-recipient .recipient-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.calculator-recipient .recipient-details {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.calculator-display {
+    background: var(--black);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.display-expression {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    min-height: 20px;
+    margin-bottom: 8px;
+}
+
+.display-result {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--lime);
+}
+
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.calc-btn {
+    aspect-ratio: 1.2;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.calc-btn-op {
+    background: var(--light-gray);
+    color: var(--black);
+}
+
+.calc-btn-op:hover {
+    background: #E8E8E8;
+}
+
+.calc-btn-action {
+    background: var(--purple);
+    color: var(--white);
+}
+
+.calc-btn-action:hover {
+    background: #8B5FB8;
+}
+
+.calc-btn-clear {
+    background: #FF4444;
+    color: var(--white);
+}
+
+.calc-btn-clear:hover {
+    background: #E63E3E;
+}
+
+.calc-btn-equals {
+    grid-column: span 4;
+    aspect-ratio: auto;
+    height: 56px;
+    background: var(--lime-gradient);
+    color: var(--black);
+    font-size: 24px;
+}
+
+.calc-btn-equals:hover {
+    background: #A8E500;
+}
+
+.transfer-quick-amounts {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 8px 0;
+}
+
+.transfer-quick-amounts::-webkit-scrollbar {
+    display: none;
+}
+
+.quick-amount-btn {
+    flex-shrink: 0;
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--purple);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-amount-btn:hover {
+    background: rgba(158, 111, 195, 0.1);
+    border-color: var(--purple);
 }
 
 /* ========================================
