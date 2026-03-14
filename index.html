@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ОТП Банк Онлайн</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Главный экран -->
+        <main class="screen active" id="home-screen">
+            <!-- Верхняя зафиксированная часть -->
+            <header class="header">
+                <div class="header-top">
+                    <div class="profile-section">
+                        <div class="avatar">
+                            <span>А</span>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">Александр</span>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <button class="icon-btn" title="Поиск">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                        <button class="icon-btn" title="Уведомления">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Основная область -->
+            <div class="content-scroll">
+                <!-- Промо-баннеры -->
+                <section class="promo-banners">
+                    <div class="promo-banner" style="background: linear-gradient(135deg, #FFD9E8 0%, #E8D4FF 100%);">
+                        <div class="promo-content">
+                            <span class="promo-title">До 3 млн на всё</span>
+                        </div>
+                    </div>
+                    <div class="promo-banner" style="background: linear-gradient(135deg, #6B4C9A 0%, #9E6FC3 100%);">
+                        <div class="promo-content">
+                            <span class="promo-title">Мы в MAX</span>
+                        </div>
+                    </div>
+                    <div class="promo-banner" style="background: linear-gradient(135deg, #4A9FE8 0%, #6BB6FF 100%);">
+                        <div class="promo-content">
+                            <span class="promo-title">Осторожно жулики</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Виджет баланса -->
+                <section class="balance-widget">
+                    <div class="balance-main">
+                        <div class="balance-top">
+                            <span class="balance-amount">757 300</span>
+                            <span class="balance-currency-icon">₽</span>
+                        </div>
+                        <span class="balance-description">Расплачивайтесь картой, а мы начислим бонусные рубли</span>
+                    </div>
+                    <div class="balance-side">
+                        <div class="referral-mini" onclick="navigateTo('products-screen')">
+                            <span class="referral-mini-title">До 2 500 ₽ за друга</span>
+                        </div>
+                        <div class="balance-actions-mini">
+                            <button class="balance-action-mini" onclick="navigateTo('cashback-screen')" title="Кэшбэк">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                            <button class="balance-action-mini" onclick="navigateTo('transfer-screen')">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Быстрые переводы -->
+                <section class="quick-transfers-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⚡ Быстрые переводы</h2>
+                        <button class="section-action" onclick="openFavoritesModal()">Все получатели</button>
+                    </div>
+                    <div class="quick-transfers-list">
+                        <div class="quick-transfer-item" onclick="quickTransfer('Папа', '+79991234567', 'СберБанк')">
+                            <div class="quick-transfer-avatar dad-bg">
+                                <span>👨</span>
+                            </div>
+                            <span class="quick-transfer-name">Папа</span>
+                        </div>
+                        <div class="quick-transfer-item" onclick="quickTransfer('Мама', '+79992345678', 'Т-Банк')">
+                            <div class="quick-transfer-avatar mom-bg">
+                                <span>👩</span>
+                            </div>
+                            <span class="quick-transfer-name">Мама</span>
+                        </div>
+                        <div class="quick-transfer-item" onclick="quickTransfer('Сестра', '+79993456789', 'Альфа-Банк')">
+                            <div class="quick-transfer-avatar sister-bg">
+                                <span>👨‍👩‍👧</span>
+                            </div>
+                            <span class="quick-transfer-name">Сестра</span>
+                        </div>
+                        <div class="quick-transfer-item" onclick="openFavoritesModal()">
+                            <div class="quick-transfer-avatar more-bg">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <span class="quick-transfer-name">Ещё</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Карты -->
+                <section class="products-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Карты</h2>
+                        <button class="section-action" onclick="navigateTo('products-screen')">Оформить</button>
+                    </div>
+                    <div class="card-item" onclick="navigateTo('card-detail-screen')">
+                        <div class="card-visual lime-gradient">
+                            <div class="card-balance">
+                                <span class="balance-amount">22 800 ₽</span>
+                                <span class="balance-label">ОТП Карта</span>
+                                <div class="card-footer">
+                                    <span class="mir-logo">МИР</span>
+                                    <span class="card-last4">1337</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="promo-card-banner" onclick="navigateTo('products-screen')">
+                        <div class="promo-card-content">
+                            <span class="promo-card-title">Оформи ОТП Карту</span>
+                            <span class="promo-card-subtitle">С кешбэком до 3 000 ₽ в месяц</span>
+                        </div>
+                        <button class="close-banner">×</button>
+                    </div>
+                </section>
+
+                <!-- Кредиты -->
+                <section class="products-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Кредиты</h2>
+                        <button class="section-action" onclick="navigateTo('products-screen')">Получить</button>
+                    </div>
+                    <div class="credit-card-item">
+                        <div class="credit-card-visual purple-gradient">
+                            <div class="credit-card-balance">
+                                <span class="credit-card-label">Кредит наличными</span>
+                                <span class="credit-card-amount">234 500 ₽</span>
+                                <span class="credit-card-details">Платёж до 15.04 • 12 300 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Вклады и счета -->
+                <section class="products-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Вклады и счета</h2>
+                        <button class="section-action" onclick="navigateTo('products-screen')">Открыть</button>
+                    </div>
+                    <div class="deposit-card-item">
+                        <div class="deposit-card-visual blue-gradient">
+                            <div class="deposit-card-balance">
+                                <span class="deposit-card-label">ОТП Максимальный</span>
+                                <span class="deposit-card-amount">500 000 ₽</span>
+                                <span class="deposit-card-details">16.5% годовых • до 15.12.2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Курсы валют -->
+                <section class="currency-widget">
+                    <div class="section-header">
+                        <h2 class="section-title">Курсы валют</h2>
+                        <button class="section-action" onclick="navigateTo('products-screen')">Обменять</button>
+                    </div>
+                    <div class="currency-list">
+                        <div class="currency-item">
+                            <div class="currency-flag">🇨🇳</div>
+                            <span class="currency-code">CNY</span>
+                            <div class="currency-rates">
+                                <span class="currency-rate">11,10</span>
+                                <span class="currency-rate">12,30</span>
+                            </div>
+                        </div>
+                        <div class="currency-item">
+                            <div class="currency-flag">🇪🇺</div>
+                            <span class="currency-code">EUR</span>
+                            <div class="currency-rates">
+                                <span class="currency-rate">88,50</span>
+                                <span class="currency-rate">96,50</span>
+                            </div>
+                        </div>
+                        <div class="currency-item">
+                            <div class="currency-flag">🇺🇸</div>
+                            <span class="currency-code">USD</span>
+                            <div class="currency-rates">
+                                <span class="currency-rate">73,50</span>
+                                <span class="currency-rate">87,50</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="more-currencies-btn" onclick="navigateTo('products-screen')">Другие валюты</button>
+                </section>
+
+                <!-- Полезное -->
+                <section class="useful-widget">
+                    <h2 class="section-title">Полезное</h2>
+                    <div class="useful-list">
+                        <button class="useful-item" onclick="navigateTo('products-screen')">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 21V10L12 3L21 10V21" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                <path d="M9 21V15H15V21" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span>Офисы и банкоматы</span>
+                        </button>
+                        <button class="useful-item" onclick="navigateTo('transfer-screen')">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="9" y1="18" x2="15" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            <span>Оплата мобильной связи</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- CTA кнопка -->
+                <button class="cta-button" onclick="navigateTo('products-screen')">Оформить продукт</button>
+            </div>
+        </main>
+
+        <!-- Экран карты -->
+        <main class="screen" id="card-detail-screen">
+            <header class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home-screen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="screen-title">ОТП Карта</h1>
+                <button class="header-settings-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19.4 15C19.7471 14.3911 19.9311 13.7061 19.9311 13C19.9311 12.2939 19.7471 11.6089 19.4 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M4.6 11C4.25294 11.6089 4.06888 12.2939 4.06888 13C4.06888 13.7061 4.25294 14.3911 4.6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Визуал карты -->
+                <div class="card-detail-visual lime-gradient">
+                    <div class="card-detail-chip"></div>
+                    <div class="card-detail-number" onclick="toggleCardNumber()">
+                        <span class="number-hidden">•••• •••• •••• 1337</span>
+                        <span class="number-visible" style="display: none;">4582 1234 5678 1337</span>
+                    </div>
+                    <div class="card-detail-info">
+                        <span class="card-holder">ALEKSANDR</span>
+                        <span class="card-expires">04/28</span>
+                    </div>
+                </div>
+
+                <!-- Баланс -->
+                <div class="card-balance-detail">
+                    <span class="balance-detail-label">Доступно</span>
+                    <span class="balance-detail-amount">22 800,00 ₽</span>
+                </div>
+
+                <!-- Быстрые действия -->
+                <div class="quick-actions">
+                    <button class="quick-action-btn">
+                        <div class="action-icon lime-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Пополнить</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="navigateTo('transfer-screen')">
+                        <div class="action-icon purple-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Перевести</span>
+                    </button>
+                    <button class="quick-action-btn">
+                        <div class="action-icon orange-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M2 7H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M2 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M2 17H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Оплатить</span>
+                    </button>
+                    <button class="quick-action-btn">
+                        <div class="action-icon metal-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span>Ещё</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Экран истории -->
+        <main class="screen" id="history-screen">
+            <header class="screen-header">
+                <h1 class="screen-title">История операций</h1>
+                <div class="header-actions">
+                    <button class="icon-btn" title="Фильтры">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 6H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M4 12H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <path d="M4 18H9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="icon-btn" title="Поиск">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                            <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-scroll">
+                <div class="history-filters">
+                    <div class="filter-card">
+                        <span class="filter-title">Период</span>
+                        <span class="filter-value">с 13 февраля - по 13 марта</span>
+                    </div>
+                    <div class="filter-card analytics-card" onclick="navigateTo('analytics-modal')">
+                        <span class="filter-title">Аналитика расходов</span>
+                        <span class="filter-value">48 320 ₽ за март</span>
+                    </div>
+                </div>
+
+                <div class="transactions-list">
+                    <div class="transaction-date-header">
+                        <span>Сегодня, 13 марта</span>
+                    </div>
+                    <div class="transaction-item" onclick="navigateTo('transaction-detail')">
+                        <div class="transaction-icon food-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2C12 2 10 6 10 9C10 11.2091 11.7909 13 14 13C16.2091 13 18 11.2091 18 9C18 6 16 2 16 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M6 9C6 11.2091 7.79086 13 10 13V22H14V13C16.2091 13 18 11.2091 18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-merchant">Пятёрочка</span>
+                            <span class="transaction-category">Продукты</span>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount-value">-1 234 ₽</span>
+                            <span class="cashback-badge">+12</span>
+                        </div>
+                    </div>
+                    <div class="transaction-item" onclick="navigateTo('transaction-detail')">
+                        <div class="transaction-icon transport-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M5 18H19C20.1046 18 21 17.1046 21 16V10C21 8.89543 20.1046 8 19 8H5C3.89543 8 3 8.89543 3 10V16C3 17.1046 3.89543 18 5 18Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M3 10H21" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="7" cy="18" r="2" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="17" cy="18" r="2" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-merchant">Яндекс Такси</span>
+                            <span class="transaction-category">Транспорт</span>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount-value">-456 ₽</span>
+                            <span class="cashback-badge">+5</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-date-header">
+                        <span>Вчера, 12 марта</span>
+                    </div>
+                    <div class="transaction-item" onclick="navigateTo('transaction-detail')">
+                        <div class="transaction-icon salary-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-merchant">Зачисление зарплаты</span>
+                            <span class="transaction-category">Доход</span>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount-value positive">+85 000 ₽</span>
+                        </div>
+                    </div>
+                    <div class="transaction-item" onclick="navigateTo('transaction-detail')">
+                        <div class="transaction-icon cafe-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M18 8H19C20.1046 8 21 8.89543 21 10C21 11.1046 20.1046 12 19 12H18V8Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M6 8H18V17C18 18.6569 16.6569 20 15 20H9C7.34315 20 6 18.6569 6 17V8Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M6 8C6 6.89543 6.89543 6 8 6H16C17.1046 6 18 6.89543 18 8V12H6V8Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-merchant">Кофемания</span>
+                            <span class="transaction-category">Кафе и рестораны</span>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount-value">-320 ₽</span>
+                            <span class="cashback-badge">+3</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-date-header">
+                        <span>10 марта</span>
+                    </div>
+                    <div class="transaction-item" onclick="navigateTo('transaction-detail')">
+                        <div class="transaction-icon shop-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 3H21L19 12H5L3 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                                <path d="M9 12V17C9 18.1046 9.89543 19 11 19H13C14.1046 19 15 18.1046 15 17V12" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-merchant">Wildberries</span>
+                            <span class="transaction-category">Онлайн-покупки</span>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount-value">-4 590 ₽</span>
+                            <span class="cashback-badge">+46</span>
+                        </div>
+                    </div>
+
+                    <div class="transaction-date-header">
+                        <span>5 марта</span>
+                    </div>
+                    <div class="transaction-item" onclick="navigateTo('transaction-detail')">
+                        <div class="transaction-icon utilities-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="transaction-details">
+                            <span class="transaction-merchant">ЖКХ Услуги</span>
+                            <span class="transaction-category">Коммунальные платежи</span>
+                        </div>
+                        <div class="transaction-amount">
+                            <span class="amount-value">-6 800 ₽</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Экран переводов -->
+        <main class="screen" id="transfer-screen">
+            <header class="screen-header">
+                <h1 class="screen-title">Перевести</h1>
+                <button class="icon-btn" title="QR-код">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 7V4H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 7V4H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M17 20H20V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M7 20H4V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Промо -->
+                <div class="transfer-promo" style="background: linear-gradient(135deg, #2D1B4E 0%, #4A2C6F 100%);">
+                    <div class="transfer-promo-content">
+                        <span class="transfer-promo-title">Выберите ОТП любимым</span>
+                    </div>
+                    <div class="transfer-promo-illustration">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <rect x="15" y="15" width="30" height="30" rx="8" fill="#9E6FC3"/>
+                            <path d="M30 25L32 30L37 30L33 34L35 40L30 36L25 40L27 34L23 30L28 30L30 25Z" fill="#C1FF05"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Закреплённые получатели -->
+                <section class="transfer-favorites-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⭐ Закреплённые получатели</h2>
+                        <button class="section-action" onclick="openFavoritesModal()">Все получатели</button>
+                    </div>
+                    <div class="transfer-favorites-list">
+                        <div class="transfer-favorite-item" onclick="quickTransfer('Папа', '+79991234567', 'СберБанк')">
+                            <div class="transfer-favorite-avatar dad-bg">
+                                <span>👨</span>
+                            </div>
+                            <div class="transfer-favorite-info">
+                                <span class="transfer-favorite-name">Папа</span>
+                                <span class="transfer-favorite-details">СберБанк</span>
+                            </div>
+                        </div>
+                        <div class="transfer-favorite-item" onclick="quickTransfer('Мама', '+79992345678', 'Т-Банк')">
+                            <div class="transfer-favorite-avatar mom-bg">
+                                <span>👩</span>
+                            </div>
+                            <div class="transfer-favorite-info">
+                                <span class="transfer-favorite-name">Мама</span>
+                                <span class="transfer-favorite-details">Т-Банк</span>
+                            </div>
+                        </div>
+                        <div class="transfer-favorite-item" onclick="quickTransfer('Сестра', '+79993456789', 'Альфа-Банк')">
+                            <div class="transfer-favorite-avatar sister-bg">
+                                <span>👨‍👩‍👧</span>
+                            </div>
+                            <div class="transfer-favorite-info">
+                                <span class="transfer-favorite-name">Сестра</span>
+                                <span class="transfer-favorite-details">Альфа-Банк</span>
+                            </div>
+                        </div>
+                        <div class="transfer-favorite-item" onclick="openFavoritesModal()">
+                            <div class="transfer-favorite-avatar more-bg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="transfer-favorite-info">
+                                <span class="transfer-favorite-name">Все</span>
+                                <span class="transfer-favorite-details">Контакты</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Поиск получателя -->
+                <div class="recipient-search">
+                    <input type="text" class="search-input" placeholder="Введите номер или имя">
+                    <div class="quick-recipient">
+                        <div class="recipient-avatar">C</div>
+                        <span class="recipient-name">Себе</span>
+                    </div>
+                </div>
+
+                <!-- Сетка платежей -->
+                <div class="payment-grid">
+                    <button class="payment-grid-btn" onclick="navigateTo('transfer-screen')">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M7 7H17M17 7L14 4M17 7L14 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M17 17H7M7 17L10 20M7 17L10 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Между счетами</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span>Оплата услуг</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="2" y1="11" x2="22" y2="11" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span>По номеру карты</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="9" y1="18" x2="15" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Мобильная связь</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M4 7V4H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M20 7V4H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M17 20H20V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M7 20H4V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>QR-код</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M2 12H22" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 2C14.5013 4.73835 16 8.24386 16 12C16 15.7561 14.5013 19.2616 12 22C9.49872 19.2616 8 15.7561 8 12C8 8.24386 9.49872 4.73835 12 2Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span>Переводы за границу</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <span>Обмен валюты</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M6 20C6 16.6863 8.68629 14 12 14C15.3137 14 18 16.6863 18 20" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span>Себе из другого банка</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 17V11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="12" cy="8" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span>Доброта</span>
+                    </button>
+                    <button class="payment-grid-btn">
+                        <div class="payment-grid-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="19" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="5" cy="12" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <span>Все платежи</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Экран чатов -->
+        <main class="screen" id="chat-screen">
+            <header class="screen-header-large">
+                <div class="header-illustration">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <rect x="30" y="40" width="60" height="50" rx="8" fill="#4A9FE8"/>
+                        <rect x="35" y="35" width="50" height="15" rx="4" fill="#6BB6FF"/>
+                        <circle cx="60" cy="65" r="12" fill="white" fill-opacity="0.3"/>
+                    </svg>
+                </div>
+                <h1 class="screen-title">Чаты</h1>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Уведомления -->
+                <div class="chat-settings">
+                    <div class="chat-setting-item">
+                        <span class="setting-title">Включить уведомления</span>
+                        <span class="setting-subtitle">Мы часто делаем выгодные предложения</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Список чатов -->
+                <div class="chat-list">
+                    <div class="chat-item">
+                        <div class="chat-icon bell-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="chat-content">
+                            <span class="chat-title">Уведомления</span>
+                            <span class="chat-subtitle">Начните совершать операции, и мы покажем их историю</span>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-icon wallet-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="chat-content">
+                            <span class="chat-title">Оформи ОТП Карту</span>
+                            <span class="chat-subtitle">С кешбэком до 3 000 ₽ в месяц</span>
+                        </div>
+                        <div class="chat-badge">1</div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-icon docs-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M14 2V8H20" stroke="currentColor" stroke-width="2"/>
+                                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M10 9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="chat-content">
+                            <span class="chat-title">Мои обращения</span>
+                            <span class="chat-subtitle">Здесь хранятся ваши обращения</span>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-icon chat-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M21 15C21 15.5523 20.5523 16 20 16H7L3 20V15C3 14.4477 3.44772 14 4 14H20C20.5523 14 21 14.4477 21 15Z" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="9" cy="15" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="15" r="1" fill="currentColor"/>
+                                <circle cx="15" cy="15" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="chat-content">
+                            <span class="chat-title">Чат с банком</span>
+                            <span class="chat-subtitle">На связи ✨ Напишите свой вопрос</span>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <div class="chat-icon help-bg">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9.09009 9.00001C9.57233 8.31791 10.3626 7.77747 11.3334 7.61192C12.3043 7.44637 13.4002 7.68191 14.2092 8.23069C15.0182 8.77947 15.4283 9.56793 15.3334 10.3943C15.2385 11.2207 14.6473 12 14 12V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                <circle cx="12" cy="17" r="1" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="chat-content">
+                            <span class="chat-title">Как это работает</span>
+                            <span class="chat-subtitle">Расскажем о новинках и неочевидных функциях приложения</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Экран продуктов -->
+        <main class="screen" id="products-screen">
+            <header class="screen-header">
+                <h1 class="screen-title">Оформить</h1>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Главный баннер -->
+                <div class="product-hero">
+                    <div class="product-hero-card lime-gradient">
+                        <div class="product-hero-chip"></div>
+                        <span class="product-hero-type">debit</span>
+                        <span class="product-hero-mir">МИР</span>
+                    </div>
+                    <p class="product-hero-subtitle">С кешбэком до 3 000 ₽ в месяц</p>
+                    <h2 class="product-hero-title">Оформи ОТП Карту</h2>
+                    <button class="product-hero-btn">Подробнее</button>
+                </div>
+
+                <!-- Продукты -->
+                <div class="product-list">
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Возьмите наличные</span>
+                            <span class="product-card-subtitle">До 3 000 000 ₽, решение за 1 минуту</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect x="8" y="12" width="32" height="24" rx="4" fill="#C1FF05"/>
+                                <circle cx="36" cy="30" r="10" fill="#4A9FE8"/>
+                                <text x="36" y="35" text-anchor="middle" fill="white" font-size="14" font-weight="bold">%</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Кредитная карта за 0₽</span>
+                            <span class="product-card-subtitle">120 дней без процентов и до 10% кэшбэка</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect x="8" y="12" width="32" height="24" rx="4" fill="#FF7D32"/>
+                                <rect x="12" y="16" width="20" height="16" rx="2" fill="#9E6FC3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Дебетовая карта</span>
+                            <span class="product-card-subtitle">Бесплатная карта с высоким кэшбэком</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect x="8" y="12" width="32" height="24" rx="4" fill="#C1FF05"/>
+                                <rect x="12" y="16" width="20" height="16" rx="2" fill="#4A9FE8"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Платежный стикер</span>
+                            <span class="product-card-subtitle">Наклейте на телефон и платите в одно касание</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect x="14" y="8" width="20" height="32" rx="4" fill="#9E6FC3"/>
+                                <rect x="18" y="32" width="12" height="6" rx="1" fill="#C1FF05"/>
+                                <path d="M38 20L42 24L38 28" stroke="#9E6FC3" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Рефинансирование</span>
+                            <span class="product-card-subtitle">Уменьшите платежи по кредитам</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <circle cx="18" cy="28" r="10" fill="#4A9FE8"/>
+                                <rect x="28" y="12" width="16" height="24" rx="2" fill="#9E6FC3"/>
+                                <path d="M24 28L30 28" stroke="#C1FF05" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Польза+ 🔥</span>
+                            <span class="product-card-subtitle">Забота о семье, доме и здоровье</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <path d="M24 4C24 4 20 12 20 18C20 22.4183 23.5817 26 28 26C32.4183 26 36 22.4183 36 18C36 12 32 4 32 4" stroke="#C1FF05" stroke-width="3" stroke-linecap="round"/>
+                                <rect x="14" y="18" width="20" height="24" rx="4" fill="#9E6FC3"/>
+                                <path d="M24 24V36M18 30H30" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Экспресс-деньги</span>
+                            <span class="product-card-subtitle">От 5 000 ₽ до 12 месяцев быстро и без справок</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <circle cx="24" cy="24" r="14" fill="#9E6FC3"/>
+                                <text x="24" y="30" text-anchor="middle" fill="white" font-size="16" font-weight="bold">₽</text>
+                                <path d="M36 32L42 38L36 44" stroke="#C1FF05" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Рефералка -->
+                <div class="referral-banner">
+                    <span class="referral-banner-title">Приглашайте и зарабатывайте!</span>
+                    <span class="referral-banner-subtitle">Получите до 2 500 ₽ за друга</span>
+                    <div class="referral-banner-gift">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <rect x="10" y="20" width="40" height="35" rx="4" fill="white"/>
+                            <rect x="27" y="20" width="6" height="35" fill="#9E6FC3"/>
+                            <rect x="10" y="35" width="40" height="6" fill="#9E6FC3"/>
+                            <path d="M30 20C30 20 26 14 30 10C34 14 30 20 30 20Z" fill="#9E6FC3"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Наши предложения -->
+                <div class="our-offers">
+                    <h2 class="section-title">Наши предложения</h2>
+                    <div class="offer-card">
+                        <div class="offer-card-content">
+                            <span class="offer-card-title">Выгодная ставка 14,45% по вкладу</span>
+                        </div>
+                        <div class="offer-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <circle cx="24" cy="24" r="18" fill="#9E6FC3" fill-opacity="0.3"/>
+                                <circle cx="24" cy="24" r="12" fill="#9E6FC3"/>
+                                <text x="24" y="29" text-anchor="middle" fill="white" font-size="14" font-weight="bold">₽</text>
+                                <ellipse cx="32" cy="16" rx="8" ry="3" stroke="#C1FF05" stroke-width="2"/>
+                                <path d="M24 16V32" stroke="#C1FF05" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Экран подписок -->
+        <main class="screen" id="subscriptions-screen">
+            <header class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home-screen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="screen-title">Мои подписки</h1>
+                <button class="header-settings-btn" onclick="openAddSubscriptionModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Сводка -->
+                <div class="subscriptions-summary">
+                    <div class="summary-total">
+                        <span class="summary-amount">2 340 ₽</span>
+                        <span class="summary-label">в месяц</span>
+                    </div>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">активных</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">+12%</span>
+                            <span class="stat-label">к прошлому</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Уведомление -->
+                <div class="subscription-alert">
+                    <div class="alert-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                            <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <span class="alert-text">Включите уведомления за 3 дня до списания</span>
+                    <button class="alert-btn" onclick="toggleSubscriptionNotifications()">Включить</button>
+                </div>
+
+                <!-- Список подписок -->
+                <div class="subscriptions-list">
+                    <!-- Яндекс Плюс -->
+                    <div class="subscription-item active" data-id="1">
+                        <div class="sub-icon yandex-bg"><span class="sub-icon-text">Я</span></div>
+                        <div class="sub-content">
+                            <div class="sub-header">
+                                <span class="sub-name">Яндекс Плюс</span>
+                                <span class="sub-status status-active">Активна</span>
+                            </div>
+                            <div class="sub-details">
+                                <span class="sub-amount">299 ₽/мес</span>
+                                <span class="sub-date">Следующее: 25.03.2026</span>
+                            </div>
+                            <div class="sub-features">
+                                <span class="sub-feature">🎬 Кино</span>
+                                <span class="sub-feature">🎵 Музыка</span>
+                            </div>
+                        </div>
+                        <div class="sub-actions">
+                            <button class="sub-action-btn notify-on" onclick="toggleNotify(1)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                            <button class="sub-action-btn cancel-btn" onclick="openCancelModal('Яндекс Плюс', 1)">Отписаться</button>
+                        </div>
+                    </div>
+
+                    <!-- OZON Premium -->
+                    <div class="subscription-item active" data-id="2">
+                        <div class="sub-icon ozon-bg"><span class="sub-icon-text">O</span></div>
+                        <div class="sub-content">
+                            <div class="sub-header">
+                                <span class="sub-name">OZON Premium</span>
+                                <span class="sub-status status-active">Активна</span>
+                            </div>
+                            <div class="sub-details">
+                                <span class="sub-amount">199 ₽/мес</span>
+                                <span class="sub-date">Следующее: 28.03.2026</span>
+                            </div>
+                            <div class="sub-features">
+                                <span class="sub-feature">🛍️ Кэшбэк</span>
+                                <span class="sub-feature">🚚 Доставка</span>
+                            </div>
+                        </div>
+                        <div class="sub-actions">
+                            <button class="sub-action-btn notify-on" onclick="toggleNotify(2)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                            <button class="sub-action-btn cancel-btn" onclick="openCancelModal('OZON Premium', 2)">Отписаться</button>
+                        </div>
+                    </div>
+
+                    <!-- СберПрайм (пробный) -->
+                    <div class="subscription-item trial" data-id="3">
+                        <div class="sub-icon sber-bg"><span class="sub-icon-text">С</span></div>
+                        <div class="sub-content">
+                            <div class="sub-header">
+                                <span class="sub-name">СберПрайм</span>
+                                <span class="sub-status status-trial">Пробный 30 дней</span>
+                            </div>
+                            <div class="sub-details">
+                                <span class="sub-amount">0 ₽ (до 10.04.2026)</span>
+                                <span class="sub-date trial-warning">Потом 299 ₽/мес</span>
+                            </div>
+                            <div class="sub-features">
+                                <span class="sub-feature">🎬 Кино</span>
+                                <span class="sub-feature">🎵 Музыка</span>
+                            </div>
+                        </div>
+                        <div class="sub-actions">
+                            <button class="sub-action-btn notify-alert" onclick="toggleNotify(3)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                            <button class="sub-action-btn cancel-btn" onclick="openCancelModal('СберПрайм', 3)">Отписаться</button>
+                        </div>
+                    </div>
+
+                    <!-- Netflix -->
+                    <div class="subscription-item failed" data-id="4">
+                        <div class="sub-icon netflix-bg"><span class="sub-icon-text">N</span></div>
+                        <div class="sub-content">
+                            <div class="sub-header">
+                                <span class="sub-name">Netflix</span>
+                                <span class="sub-status status-failed">Платёж не прошёл</span>
+                            </div>
+                            <div class="sub-details">
+                                <span class="sub-amount">799 ₽/мес</span>
+                                <span class="sub-date">Последнее: 15.02.2026</span>
+                            </div>
+                            <div class="sub-features">
+                                <span class="sub-feature">⚠️ Требуется оплата</span>
+                            </div>
+                        </div>
+                        <div class="sub-actions">
+                            <button class="sub-action-btn update-card" onclick="updateCardForSub(4)">Обновить</button>
+                            <button class="sub-action-btn cancel-btn" onclick="openCancelModal('Netflix', 4)">Удалить</button>
+                        </div>
+                    </div>
+
+                    <!-- МТС Premium -->
+                    <div class="subscription-item active" data-id="5">
+                        <div class="sub-icon mts-bg"><span class="sub-icon-text">М</span></div>
+                        <div class="sub-content">
+                            <div class="sub-header">
+                                <span class="sub-name">МТС Premium</span>
+                                <span class="sub-status status-active">Активна</span>
+                            </div>
+                            <div class="sub-details">
+                                <span class="sub-amount">349 ₽/мес</span>
+                                <span class="sub-date">Следующее: 05.04.2026</span>
+                            </div>
+                            <div class="sub-features">
+                                <span class="sub-feature">📱 Связь</span>
+                                <span class="sub-feature">🎵 Музыка</span>
+                            </div>
+                        </div>
+                        <div class="sub-actions">
+                            <button class="sub-action-btn notify-on" onclick="toggleNotify(5)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 22C13.1046 22 14 21.1046 14 20H10C10 21.1046 10.8954 22 12 22Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M18 16V10C18 7.23858 15.7614 5 13 5C13 3.89543 12.1046 3 11 3C9.89543 3 9 3.89543 9 5C6.23858 5 4 7.23858 4 10V16L2 18V19H20V18L18 16Z" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </button>
+                            <button class="sub-action-btn cancel-btn" onclick="openCancelModal('МТС Premium', 5)">Отписаться</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Статистика -->
+                <div class="subscription-stats">
+                    <h3 class="stats-title">📈 Статистика за месяц</h3>
+                    <div class="stats-bars">
+                        <div class="stat-bar">
+                            <div class="stat-bar-label">Развлечения</div>
+                            <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 65%; background: #9E6FC3;"></div></div>
+                            <div class="stat-bar-value">1 526 ₽</div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-label">Шопинг</div>
+                            <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 25%; background: #C1FF05;"></div></div>
+                            <div class="stat-bar-value">387 ₽</div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-label">Другое</div>
+                            <div class="stat-bar-track"><div class="stat-bar-fill" style="width: 42%; background: #FF7D32;"></div></div>
+                            <div class="stat-bar-value">427 ₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Настройки уведомлений -->
+                <div class="subscription-settings">
+                    <h3 class="settings-title">⚙️ Настройки уведомлений</h3>
+                    <div class="setting-item">
+                        <div class="setting-content"><span class="setting-label">Напоминать за 3 дня до списания</span></div>
+                        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-content"><span class="setting-label">Уведомлять о списании</span></div>
+                        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-content">
+                            <span class="setting-label">Предупреждать об окончании пробного</span>
+                            <span class="setting-subtitle">За 5 дней до конца</span>
+                        </div>
+                        <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Экран персонализированного кэшбэка -->
+        <main class="screen" id="cashback-screen">
+            <header class="screen-header">
+                <button class="back-btn" onclick="navigateTo('home-screen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="screen-title">Кэшбэк в апреле</h1>
+                <button class="header-settings-btn" onclick="openCashbackSettings()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19.4 15C19.7471 14.3911 19.9311 13.7061 19.9311 13C19.9311 12.2939 19.7471 11.6089 19.4 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M4.6 11C4.25294 11.6089 4.06888 12.2939 4.06888 13C4.06888 13.7061 4.25294 14.3911 4.6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Уведомление -->
+                <div class="cashback-notification">
+                    <div class="notification-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="16" cy="16" r="14" fill="#C1FF05"/>
+                            <path d="M16 10V16L20 18" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h2 class="notification-title">🎉 Мы выбрали категории для вас!</h2>
+                    <p class="notification-text">На основе ваших трат в марте мы выбрали эти категории:</p>
+                </div>
+
+                <!-- Категории -->
+                <div class="cashback-categories">
+                    <div class="cashback-category-card">
+                        <div class="category-icon food-bg">
+                            <span>🍔</span>
+                        </div>
+                        <div class="category-info">
+                            <div class="category-header">
+                                <span class="category-name">Рестораны и кафе</span>
+                                <span class="category-percent">5%</span>
+                            </div>
+                            <div class="category-stats">
+                                <span class="category-spent">Ваши траты: 12 450 ₽</span>
+                                <span class="category-cashback">Кэшбэк: ~620 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cashback-category-card">
+                        <div class="category-icon transport-bg">
+                            <span>🚕</span>
+                        </div>
+                        <div class="category-info">
+                            <div class="category-header">
+                                <span class="category-name">Такси</span>
+                                <span class="category-percent">5%</span>
+                            </div>
+                            <div class="category-stats">
+                                <span class="category-spent">Ваши траты: 5 670 ₽</span>
+                                <span class="category-cashback">Кэшбэк: ~280 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cashback-category-card">
+                        <div class="category-icon shop-bg">
+                            <span>🛒</span>
+                        </div>
+                        <div class="category-info">
+                            <div class="category-header">
+                                <span class="category-name">Супермаркеты</span>
+                                <span class="category-percent">3%</span>
+                            </div>
+                            <div class="category-stats">
+                                <span class="category-spent">Ваши траты: 28 900 ₽</span>
+                                <span class="category-cashback">Кэшбэк: ~870 ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Прогноз -->
+                <div class="cashback-prediction">
+                    <div class="prediction-icon">💰</div>
+                    <div class="prediction-content">
+                        <span class="prediction-label">Прогноз кэшбэка</span>
+                        <span class="prediction-amount">~1 050 ₽</span>
+                    </div>
+                </div>
+
+                <!-- Прогресс -->
+                <div class="cashback-progress-section">
+                    <h3 class="progress-title">📊 Ваш прогресс</h3>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 62%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span class="progress-current">650 ₽</span>
+                            <span class="progress-total">из 1 050 ₽</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-details">
+                        <div class="progress-detail-item">
+                            <div class="detail-header">
+                                <span>🍔 Рестораны</span>
+                                <span>320 / 620 ₽</span>
+                            </div>
+                            <div class="detail-bar">
+                                <div class="detail-fill" style="width: 52%;"></div>
+                            </div>
+                            <span class="detail-spent">Траты: 6 400 ₽</span>
+                        </div>
+
+                        <div class="progress-detail-item">
+                            <div class="detail-header">
+                                <span>🚕 Такси</span>
+                                <span>230 / 280 ₽</span>
+                            </div>
+                            <div class="detail-bar">
+                                <div class="detail-fill" style="width: 82%;"></div>
+                            </div>
+                            <span class="detail-spent">Траты: 4 600 ₽</span>
+                        </div>
+
+                        <div class="progress-detail-item">
+                            <div class="detail-header">
+                                <span>🛒 Супермаркеты</span>
+                                <span>100 / 870 ₽</span>
+                            </div>
+                            <div class="detail-bar">
+                                <div class="detail-fill" style="width: 11%;"></div>
+                            </div>
+                            <span class="detail-spent">Траты: 3 300 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Кнопки действий -->
+                <div class="cashback-actions">
+                    <button class="btn-secondary" onclick="openCashbackSettings()">Изменить категории</button>
+                    <button class="btn-primary" onclick="acceptCashbackCategories()">Принять</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- МОДАЛЬНОЕ ОКНО ВЫБОРА КАТЕГОРИЙ -->
+        <div class="modal-overlay" id="cashback-settings-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Выбор категорий</h2>
+                    <button class="modal-close" onclick="closeCashbackSettings()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description">Выберите 3-5 категорий для кэшбэка:</p>
+                    
+                    <div class="category-selection-list">
+                        <label class="category-selection-item">
+                            <input type="checkbox" checked disabled>
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">🍔</span>
+                                <span class="category-selection-name">Рестораны и кафе</span>
+                                <span class="category-selection-percent">5%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox" checked>
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">🚕</span>
+                                <span class="category-selection-name">Такси</span>
+                                <span class="category-selection-percent">5%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox" checked>
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">🛒</span>
+                                <span class="category-selection-name">Супермаркеты</span>
+                                <span class="category-selection-percent">3%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox">
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">💊</span>
+                                <span class="category-selection-name">Аптеки</span>
+                                <span class="category-selection-percent">5%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox">
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">⛽</span>
+                                <span class="category-selection-name">АЗС</span>
+                                <span class="category-selection-percent">5%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox">
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">🎬</span>
+                                <span class="category-selection-name">Кино</span>
+                                <span class="category-selection-percent">7%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox">
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">🎵</span>
+                                <span class="category-selection-name">Музыка</span>
+                                <span class="category-selection-percent">5%</span>
+                            </div>
+                        </label>
+
+                        <label class="category-selection-item">
+                            <input type="checkbox">
+                            <div class="category-selection-content">
+                                <span class="category-selection-icon">🏠</span>
+                                <span class="category-selection-name">ЖКХ</span>
+                                <span class="category-selection-percent">5%</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="selection-counter">
+                        Выбрано: <span id="selected-count">3</span> из 3-5
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeCashbackSettings()">Отмена</button>
+                    <button class="btn-primary" onclick="saveCashbackCategories()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ОТМЕНЫ ПОДПИСКИ -->
+        <div class="modal-overlay" id="cancel-subscription-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Отмена подписки</h2>
+                    <button class="modal-close" onclick="closeCancelModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="cancel-warning">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="20" fill="#FFF3CD"/>
+                            <path d="M24 14V26" stroke="#FF7D32" stroke-width="3" stroke-linecap="round"/>
+                            <circle cx="24" cy="32" r="2" fill="#FF7D32"/>
+                        </svg>
+                    </div>
+                    <p class="cancel-text">Вы действительно хотите отменить подписку <strong id="cancel-sub-name">Яндекс Плюс</strong>?</p>
+                    <div class="cancel-info">
+                        <p>✓ Доступ сохранится до конца оплаченного периода</p>
+                        <p>✓ Следующее списание не произойдёт</p>
+                        <p>✓ Вы сможете подписаться снова в любое время</p>
+                    </div>
+                    <div class="cancel-reason">
+                        <label class="cancel-label">Причина отмены (необязательно):</label>
+                        <select class="cancel-select" id="cancel-reason-select">
+                            <option value="">Выберите причину</option>
+                            <option value="expensive">Слишком дорого</option>
+                            <option value="not-using">Не использую</option>
+                            <option value="found-alternative">Нашёл альтернативу</option>
+                            <option value="technical">Технические проблемы</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeCancelModal()">Вернуться</button>
+                    <button class="btn-danger" onclick="confirmCancelSubscription()">Отписаться</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ПОДПИСКИ -->
+        <div class="modal-overlay" id="add-subscription-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Добавить подписку</h2>
+                    <button class="modal-close" onclick="closeAddSubscriptionModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="add-manual">
+                        <label class="add-label">Название сервиса:</label>
+                        <input type="text" class="add-input" placeholder="Например: Netflix" id="add-sub-name">
+                        <label class="add-label">Сумма (₽):</label>
+                        <input type="number" class="add-input" placeholder="299" id="add-sub-amount">
+                        <label class="add-label">Дата списания:</label>
+                        <input type="date" class="add-input" id="add-sub-date">
+                        <label class="add-label">Категория:</label>
+                        <select class="add-input" id="add-sub-category">
+                            <option value="entertainment">Развлечения</option>
+                            <option value="shopping">Шопинг</option>
+                            <option value="music">Музыка</option>
+                            <option value="movies">Кино</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeAddSubscriptionModal()">Отмена</button>
+                    <button class="btn-primary" onclick="confirmAddSubscription()">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ЗАКРЕПЛЁННЫХ ПОЛУЧАТЕЛЕЙ -->
+        <div class="modal-overlay" id="favorites-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Закреплённые получатели</h2>
+                    <button class="modal-close" onclick="closeFavoritesModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="favorites-search">
+                        <input type="text" class="search-input" placeholder="🔍 Поиск получателя..." id="favorites-search-input" onkeyup="filterFavorites()">
+                    </div>
+
+                    <h3 class="favorites-section-title">⭐ Закреплённые</h3>
+                    <div class="favorites-list" id="favorites-list">
+                        <div class="favorite-item" onclick="quickTransfer('Папа', '+79991234567', 'СберБанк')">
+                            <div class="favorite-avatar dad-bg">
+                                <span>👨</span>
+                            </div>
+                            <div class="favorite-info">
+                                <span class="favorite-name">Папа</span>
+                                <span class="favorite-details">+7 (999) 123-45-67 • СберБанк</span>
+                            </div>
+                            <button class="favorite-remove" onclick="event.stopPropagation(); removeFavorite(this)">×</button>
+                        </div>
+
+                        <div class="favorite-item" onclick="quickTransfer('Мама', '+79992345678', 'Т-Банк')">
+                            <div class="favorite-avatar mom-bg">
+                                <span>👩</span>
+                            </div>
+                            <div class="favorite-info">
+                                <span class="favorite-name">Мама</span>
+                                <span class="favorite-details">+7 (999) 234-56-78 • Т-Банк</span>
+                            </div>
+                            <button class="favorite-remove" onclick="event.stopPropagation(); removeFavorite(this)">×</button>
+                        </div>
+
+                        <div class="favorite-item" onclick="quickTransfer('Сестра', '+79993456789', 'Альфа-Банк')">
+                            <div class="favorite-avatar sister-bg">
+                                <span>👨‍👩‍👧</span>
+                            </div>
+                            <div class="favorite-info">
+                                <span class="favorite-name">Сестра</span>
+                                <span class="favorite-details">+7 (999) 345-67-89 • Альфа-Банк</span>
+                            </div>
+                            <button class="favorite-remove" onclick="event.stopPropagation(); removeFavorite(this)">×</button>
+                        </div>
+                    </div>
+
+                    <h3 class="favorites-section-title">📞 Все контакты</h3>
+                    <div class="contacts-list" id="contacts-list">
+                        <div class="contact-item" onclick="addNewFavorite('Брат', '+79994567890', 'ВТБ')">
+                            <div class="contact-avatar">
+                                <span>👦</span>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-name">Брат</span>
+                                <span class="contact-details">+7 (999) 456-78-90 • ВТБ</span>
+                            </div>
+                            <button class="contact-add" onclick="event.stopPropagation(); addNewFavorite('Брат', '+79994567890', 'ВТБ')">+</button>
+                        </div>
+
+                        <div class="contact-item" onclick="addNewFavorite('Друг', '+79995678901', 'СберБанк')">
+                            <div class="contact-avatar">
+                                <span>👤</span>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-name">Друг</span>
+                                <span class="contact-details">+7 (999) 567-89-01 • СберБанк</span>
+                            </div>
+                            <button class="contact-add" onclick="event.stopPropagation(); addNewFavorite('Друг', '+79995678901', 'СберБанк')">+</button>
+                        </div>
+                    </div>
+
+                    <button class="add-contact-btn" onclick="openAddContactModal()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        Добавить нового получателя
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ПОЛУЧАТЕЛЯ -->
+        <div class="modal-overlay" id="add-contact-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Новый получатель</h2>
+                    <button class="modal-close" onclick="closeAddContactModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="add-contact-form">
+                        <label class="add-contact-label">Имя получателя:</label>
+                        <input type="text" class="add-contact-input" placeholder="Например: Друг Иван" id="new-contact-name">
+
+                        <label class="add-contact-label">Номер телефона:</label>
+                        <input type="tel" class="add-contact-input" placeholder="+7 (___) ___-__-__" id="new-contact-phone" oninput="formatPhoneInput(this)">
+
+                        <label class="add-contact-label">Банк:</label>
+                        <select class="add-contact-input" id="new-contact-bank">
+                            <option value="">Выберите банк</option>
+                            <option value="СберБанк">СберБанк</option>
+                            <option value="Т-Банк">Т-Банк</option>
+                            <option value="Альфа-Банк">Альфа-Банк</option>
+                            <option value="ВТБ">ВТБ</option>
+                            <option value="ОТП Банк">ОТП Банк</option>
+                            <option value="Другой">Другой</option>
+                        </select>
+
+                        <label class="add-contact-label">
+                            <input type="checkbox" id="new-contact-favorite" checked>
+                            Закрепить получателя
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeAddContactModal()">Отмена</button>
+                    <button class="btn-primary" onclick="saveNewContact()">Добавить</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-screen="home-screen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                    <path d="M12 6V9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Мой банк</span>
+            </button>
+            <button class="nav-item" data-screen="history-screen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>История</span>
+            </button>
+            <button class="nav-item" data-screen="subscriptions-screen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M8 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M3 10H21" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>Подписки</span>
+            </button>
+            <button class="nav-item" data-screen="transfer-screen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                    <text x="12" y="16" text-anchor="middle" fill="currentColor" font-size="14" font-weight="bold">₽</text>
+                </svg>
+                <span>Платежи</span>
+            </button>
+            <button class="nav-item" data-screen="chat-screen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M21 15C21 15.5523 20.5523 16 20 16H7L3 20V15C3 14.4477 3.44772 14 4 14H20C20.5523 14 21 14.4477 21 15Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>Чаты</span>
+            </button>
+        </nav>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
