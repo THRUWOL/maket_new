@@ -71,12 +71,12 @@
 
                 <!-- Виджет баланса -->
                 <section class="balance-widget">
-                    <div class="balance-main">
+                    <div class="balance-main" onclick="navigateTo('history-screen')" style="cursor: pointer;">
                         <div class="balance-top">
-                            <span class="balance-amount">757 300</span>
+                            <span class="balance-amount">48 320</span>
                             <span class="balance-currency-icon">₽</span>
                         </div>
-                        <span class="balance-description">Расплачивайтесь картой, а мы начислим бонусные рубли</span>
+                        <span class="balance-description">Траты за март</span>
                     </div>
                     <div class="balance-side">
                         <div class="referral-mini cashback-mini" onclick="navigateTo('cashback-screen')">
@@ -93,15 +93,11 @@
                             <span class="cashback-amount">1 770 ₽</span>
                         </div>
                         <div class="balance-actions-mini">
-                            <button class="balance-action-mini" onclick="navigateTo('transfer-screen')" title="Переводы">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" stroke="currentColor" stroke-width="2"/>
-                                </svg>
+                            <button class="balance-action-mini" onclick="navigateTo('transfer-screen')" title="Оплата по СБП">
+                                <img src="https://shtrih-market.ru/значки_оплата/sbp.png" alt="СБП" width="24" height="24">
                             </button>
-                            <button class="balance-action-mini" onclick="navigateTo('products-screen')" title="Продукты">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                </svg>
+                            <button class="balance-action-mini" onclick="openQRScanner()" title="Оплата по QR">
+                                <img src="https://cdn.icon-icons.com/icons2/3415/PNG/512/code_qr_scan_icon_218167.png" alt="QR" width="24" height="24">
                             </button>
                         </div>
                     </div>
@@ -204,6 +200,19 @@
                     </div>
                 </section>
 
+                <!-- Распределение зарплаты -->
+                <div class="promo-card-banner salary-promo-banner" onclick="openSalaryDistributionModal()">
+                    <div class="promo-card-content">
+                        <span class="promo-card-title">💰 Распределение зарплаты</span>
+                        <span class="promo-card-subtitle">Откладывайте автоматически в день зарплаты</span>
+                    </div>
+                    <div class="promo-card-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+
                 <!-- Курсы валют -->
                 <section class="currency-widget">
                     <div class="section-header">
@@ -211,9 +220,8 @@
                         <div class="section-actions">
                             <button class="icon-btn-sm" onclick="openCurrencySettings()" title="Настроить валюты">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-                                    <path d="M19.4 15C19.7471 14.3911 19.9311 13.7061 19.9311 13C19.9311 12.2939 19.7471 11.6089 19.4 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                                    <path d="M4.6 11C4.25294 11.6089 4.06888 12.2939 4.06888 13C4.06888 13.7061 4.25294 14.3911 4.6 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M12 20H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M16.5 3.5L20.5 7.5L7 21L3 21L3 17L16.5 3.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                                 </svg>
                             </button>
                             <button class="section-action" onclick="navigateTo('products-screen')">Обменять</button>
@@ -221,7 +229,7 @@
                     </div>
                     <div class="currency-list" id="currency-list">
                         <div class="currency-item" data-currency="CNY">
-                            <div class="currency-flag">🇨🇳</div>
+                            <span class="currency-selection-flag currency-flag-cn">¥</span>
                             <span class="currency-code">CNY</span>
                             <div class="currency-rates">
                                 <span class="currency-rate">11,10</span>
@@ -229,7 +237,7 @@
                             </div>
                         </div>
                         <div class="currency-item" data-currency="EUR">
-                            <div class="currency-flag">🇪🇺</div>
+                            <span class="currency-selection-flag currency-flag-eu">€</span>
                             <span class="currency-code">EUR</span>
                             <div class="currency-rates">
                                 <span class="currency-rate">88,50</span>
@@ -237,7 +245,7 @@
                             </div>
                         </div>
                         <div class="currency-item" data-currency="USD">
-                            <div class="currency-flag">🇺🇸</div>
+                            <span class="currency-selection-flag currency-flag-us">$</span>
                             <span class="currency-code">USD</span>
                             <div class="currency-rates">
                                 <span class="currency-rate">73,50</span>
@@ -245,7 +253,7 @@
                             </div>
                         </div>
                     </div>
-                    <button class="more-currencies-btn" onclick="openCurrencySettings()">Настроить валюты</button>
+                    <button class="more-currencies-btn" onclick="openAllCurrenciesModal()">Другие валюты</button>
                 </section>
 
                 <!-- Полезное -->
@@ -512,8 +520,8 @@
         <!-- Экран переводов -->
         <main class="screen" id="transfer-screen">
             <header class="screen-header">
-                <h1 class="screen-title">Перевести</h1>
-                <button class="icon-btn" title="QR-код">
+                <h1 class="screen-title">Платежи</h1>
+                <button class="icon-btn" title="QR-код" onclick="openQRScanner()">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M4 7V4H7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         <path d="M20 7V4H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -524,23 +532,68 @@
             </header>
 
             <div class="content-scroll">
-                <!-- Промо -->
-                <div class="transfer-promo" style="background: linear-gradient(135deg, #2D1B4E 0%, #4A2C6F 100%);">
-                    <div class="transfer-promo-content">
-                        <span class="transfer-promo-title">Выберите ОТП любимым</span>
+                <!-- Избранное (частые платежи) -->
+                <section class="payment-favorites-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⭐ Избранное</h2>
+                        <button class="section-action" onclick="openPaymentFavoritesModal()">Настроить</button>
                     </div>
-                    <div class="transfer-promo-illustration">
-                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                            <rect x="15" y="15" width="30" height="30" rx="8" fill="#9E6FC3"/>
-                            <path d="M30 25L32 30L37 30L33 34L35 40L30 36L25 40L27 34L23 30L28 30L30 25Z" fill="#C1FF05"/>
-                        </svg>
+                    <div class="payment-favorites-list">
+                        <div class="payment-favorite-item" onclick="openQuickPayment('ЖКХ Услуги', '6800')">
+                            <div class="payment-favorite-icon utilities-bg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="payment-favorite-info">
+                                <span class="payment-favorite-name">ЖКХ Услуги</span>
+                                <span class="payment-favorite-amount">6 800 ₽</span>
+                            </div>
+                        </div>
+                        <div class="payment-favorite-item" onclick="openQuickPayment('МТС', '350')">
+                            <div class="payment-favorite-icon mts-bg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <rect x="5" y="4" width="14" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <line x1="9" y1="18" x2="15" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="payment-favorite-info">
+                                <span class="payment-favorite-name">МТС</span>
+                                <span class="payment-favorite-amount">350 ₽</span>
+                            </div>
+                        </div>
+                        <div class="payment-favorite-item" onclick="openQuickPayment('Яндекс Плюс', '299')">
+                            <div class="payment-favorite-icon yandex-bg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 6V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="payment-favorite-info">
+                                <span class="payment-favorite-name">Яндекс Плюс</span>
+                                <span class="payment-favorite-amount">299 ₽</span>
+                            </div>
+                        </div>
+                        <div class="payment-favorite-item" onclick="openQuickPayment('Дом.ру', '550')">
+                            <div class="payment-favorite-icon internet-bg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="payment-favorite-info">
+                                <span class="payment-favorite-name">Дом.ру</span>
+                                <span class="payment-favorite-amount">550 ₽</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
 
                 <!-- Закреплённые получатели -->
                 <section class="transfer-favorites-section">
                     <div class="section-header">
-                        <h2 class="section-title">⭐ Закреплённые получатели</h2>
+                        <h2 class="section-title">👥 Закреплённые получатели</h2>
                         <button class="section-action" onclick="openFavoritesModal()">Все получатели</button>
                     </div>
                     <div class="transfer-favorites-list">
@@ -585,17 +638,50 @@
                     </div>
                 </section>
 
-                <!-- Поиск получателя -->
-                <div class="recipient-search">
-                    <input type="text" class="search-input" placeholder="Введите номер или имя">
-                    <div class="quick-recipient">
-                        <div class="recipient-avatar">C</div>
-                        <span class="recipient-name">Себе</span>
+                <!-- Реклама ОТП + Автоплатежи -->
+                <div class="transfer-promo" style="background: linear-gradient(135deg, #2D1B4E 0%, #4A2C6F 100%);">
+                    <div class="transfer-promo-content">
+                        <span class="transfer-promo-title">Выберите ОТП любимым</span>
+                    </div>
+                    <div class="transfer-promo-illustration">
+                        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                            <rect x="15" y="15" width="30" height="30" rx="8" fill="#9E6FC3"/>
+                            <path d="M30 25L32 30L37 30L33 34L35 40L30 36L25 40L27 34L23 30L28 30L30 25Z" fill="#C1FF05"/>
+                        </svg>
                     </div>
                 </div>
 
-                <!-- Сетка платежей -->
-                <div class="payment-grid">
+                <section class="autopayments-mini-section" onclick="navigateToAutopayments()">
+                    <div class="autopayments-mini-header">
+                        <h2 class="section-title">🔄 Автоплатежи</h2>
+                        <span class="autopayments-count"><span id="active-autopayments-count">3</span> активных</span>
+                    </div>
+                    <div class="autopayments-mini-summary">
+                        <span class="autopayments-label">Ежемесячно:</span>
+                        <span class="autopayments-amount" id="monthly-autopayments-amount">7 700 ₽</span>
+                    </div>
+                </section>
+
+                <!-- Блок "Перевести" -->
+                <section class="transfer-section">
+                    <h2 class="section-title">Перевести</h2>
+                    
+                    <!-- Поиск и быстрый получатель объединены -->
+                    <div class="transfer-search-block">
+                        <input type="text" class="search-input" placeholder="Поиск получателя..." id="transfer-search-input">
+                        <div class="quick-recipient" onclick="openQuickPayment('Себе', '0')">
+                            <div class="recipient-avatar">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <span class="recipient-name">Себе</span>
+                        </div>
+                    </div>
+
+                    <!-- Сетка платежей -->
+                    <div class="payment-grid">
                     <button class="payment-grid-btn" onclick="navigateTo('transfer-screen')">
                         <div class="payment-grid-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -692,6 +778,138 @@
                         <span>Все платежи</span>
                     </button>
                 </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Экран деталей перевода -->
+        <main class="screen" id="transfer-detail-screen">
+            <header class="screen-header">
+                <button class="back-btn" onclick="navigateTo('transfer-screen')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="screen-title">Перевод</h1>
+                <div style="width: 40px;"></div>
+            </header>
+
+            <div class="content-scroll">
+                <!-- Получатель -->
+                <div class="transfer-detail-recipient">
+                    <div class="recipient-logo-wrapper">
+                        <span class="recipient-logo" id="transfer-recipient-logo">🟢</span>
+                    </div>
+                    <h2 class="recipient-name" id="transfer-recipient-name">Папа</h2>
+                    <span class="recipient-bank" id="transfer-recipient-bank">СберБанк</span>
+                    <span class="recipient-phone" id="transfer-recipient-phone">+7 (999) 123-45-67</span>
+                </div>
+
+                <!-- Карта списания -->
+                <div class="transfer-detail-section">
+                    <label class="transfer-detail-label">С карты</label>
+                    <div class="transfer-card-wrapper">
+                        <div class="transfer-card-item selected">
+                            <div class="transfer-card-icon lime-bg">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <div class="transfer-card-info">
+                                <span class="transfer-card-name">ОТП Карта</span>
+                                <span class="transfer-card-number">••1337</span>
+                            </div>
+                            <span class="transfer-card-balance">22 800 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Сумма -->
+                <div class="transfer-detail-section">
+                    <label class="transfer-detail-label">Сумма</label>
+                    <div class="amount-input-with-calc">
+                        <input type="number" class="transfer-amount-input" id="transfer-amount" placeholder="0">
+                        <span class="amount-currency">₽</span>
+                        <button type="button" class="calc-icon-btn" onclick="toggleCalculator()" title="Калькулятор">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                <rect x="4" y="2" width="16" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="4" y1="8" x2="20" y2="8" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="8" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="16" cy="12" r="1" fill="currentColor"/>
+                                <circle cx="8" cy="16" r="1" fill="currentColor"/>
+                                <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                                <circle cx="16" cy="16" r="1" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Встроенный калькулятор -->
+                    <div class="embedded-calculator" id="embedded-calculator" style="display: none;">
+                        <div class="calc-display">
+                            <div class="calc-expression" id="calc-expression"></div>
+                            <div class="calc-result" id="calc-result">0</div>
+                        </div>
+                        <div class="calc-buttons">
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('7')">7</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('8')">8</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('9')">9</button>
+                            <button type="button" class="calc-btn-small calc-btn-op" onclick="calculatorInput('+')">+</button>
+
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('4')">4</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('5')">5</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('6')">6</button>
+                            <button type="button" class="calc-btn-small calc-btn-op" onclick="calculatorInput('-')">−</button>
+
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('1')">1</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('2')">2</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('3')">3</button>
+                            <button type="button" class="calc-btn-small calc-btn-op" onclick="calculatorInput('*')">×</button>
+
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('0')">0</button>
+                            <button type="button" class="calc-btn-small" onclick="calculatorInput('00')">00</button>
+                            <button type="button" class="calc-btn-small calc-btn-clear" onclick="calculatorInput('C')">C</button>
+                            <button type="button" class="calc-btn-small calc-btn-op" onclick="calculatorInput('/')">÷</button>
+
+                            <button type="button" class="calc-btn-small calc-btn-equals" onclick="calculateResult(); applyCalculatorResult()">=</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-amounts-compact">
+                        <button type="button" class="quick-amount-chip" onclick="setAmount(500)">500 ₽</button>
+                        <button type="button" class="quick-amount-chip" onclick="setAmount(1000)">1 000 ₽</button>
+                        <button type="button" class="quick-amount-chip" onclick="setAmount(5000)">5 000 ₽</button>
+                        <button type="button" class="quick-amount-chip" onclick="setAmount(10000)">10 000 ₽</button>
+                    </div>
+                </div>
+
+                <!-- Сообщение -->
+                <div class="transfer-detail-section">
+                    <label class="transfer-detail-label">Сообщение</label>
+                    <input type="text" class="transfer-message-input" id="transfer-message" placeholder="Например: на обед">
+                </div>
+
+                <!-- Итого -->
+                <div class="transfer-detail-total">
+                    <div class="total-row">
+                        <span class="total-label">Сумма перевода</span>
+                        <span class="total-value" id="transfer-total-amount">0 ₽</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Комиссия</span>
+                        <span class="total-value commission-free">0 ₽</span>
+                    </div>
+                    <div class="total-row total-row-main">
+                        <span class="total-label">Итого</span>
+                        <span class="total-value" id="transfer-final-amount">0 ₽</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка перевода -->
+            <div class="transfer-detail-footer">
+                <button class="btn-primary btn-large" onclick="confirmTransfer()">Перевести</button>
             </div>
         </main>
 
@@ -901,6 +1119,20 @@
                                 <circle cx="24" cy="24" r="14" fill="#9E6FC3"/>
                                 <text x="24" y="30" text-anchor="middle" fill="white" font-size="16" font-weight="bold">₽</text>
                                 <path d="M36 32L42 38L36 44" stroke="#C1FF05" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="product-card" onclick="openSalaryDistributionModal()">
+                        <div class="product-card-content">
+                            <span class="product-card-title">Распределение зарплаты 🔥</span>
+                            <span class="product-card-subtitle">Автоматически откладывайте % от зарплаты</span>
+                        </div>
+                        <div class="product-card-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <rect x="8" y="10" width="32" height="28" rx="4" fill="#9E6FC3"/>
+                                <path d="M16 20L22 26L32 16" stroke="#C1FF05" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="36" cy="36" r="10" fill="#C1FF05"/>
+                                <text x="36" y="41" text-anchor="middle" fill="#1A1A1A" font-size="12" font-weight="bold">%</text>
                             </svg>
                         </div>
                     </div>
@@ -2031,12 +2263,13 @@
                 </div>
                 <div class="modal-body">
                     <p class="modal-description">Выберите валюты для отображения на главном экране:</p>
+                    <p class="currency-limit-info">Максимум <strong>3 валюты</strong></p>
 
                     <div class="currency-selection-list" id="currency-selection-list">
                         <label class="currency-selection-item">
                             <input type="checkbox" value="USD" checked>
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇺🇸</span>
+                                <span class="currency-selection-flag currency-flag-us">$</span>
                                 <span class="currency-selection-name">USD — Доллар США</span>
                             </div>
                         </label>
@@ -2044,7 +2277,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="EUR" checked>
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇪🇺</span>
+                                <span class="currency-selection-flag currency-flag-eu">€</span>
                                 <span class="currency-selection-name">EUR — Евро</span>
                             </div>
                         </label>
@@ -2052,7 +2285,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="CNY" checked>
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇨🇳</span>
+                                <span class="currency-selection-flag currency-flag-cn">¥</span>
                                 <span class="currency-selection-name">CNY — Китайский юань</span>
                             </div>
                         </label>
@@ -2060,7 +2293,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="GBP">
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇬🇧</span>
+                                <span class="currency-selection-flag currency-flag-gb">£</span>
                                 <span class="currency-selection-name">GBP — Британский фунт</span>
                             </div>
                         </label>
@@ -2068,7 +2301,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="TRY">
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇹🇷</span>
+                                <span class="currency-selection-flag currency-flag-try">₺</span>
                                 <span class="currency-selection-name">TRY — Турецкая лира</span>
                             </div>
                         </label>
@@ -2076,7 +2309,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="KZT">
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇰🇿</span>
+                                <span class="currency-selection-flag currency-flag-kzt">₸</span>
                                 <span class="currency-selection-name">KZT — Казахский тенге</span>
                             </div>
                         </label>
@@ -2084,7 +2317,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="BYN">
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇧🇾</span>
+                                <span class="currency-selection-flag currency-flag-byn">Br</span>
                                 <span class="currency-selection-name">BYN — Белорусский рубль</span>
                             </div>
                         </label>
@@ -2092,7 +2325,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="AED">
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇦🇪</span>
+                                <span class="currency-selection-flag currency-flag-ae">د.إ</span>
                                 <span class="currency-selection-name">AED — Дирхам ОАЭ</span>
                             </div>
                         </label>
@@ -2100,7 +2333,7 @@
                         <label class="currency-selection-item">
                             <input type="checkbox" value="THB">
                             <div class="currency-selection-content">
-                                <span class="currency-selection-flag">🇹🇭</span>
+                                <span class="currency-selection-flag currency-flag-th">฿</span>
                                 <span class="currency-selection-name">THB — Тайский бат</span>
                             </div>
                         </label>
@@ -2161,6 +2394,110 @@
                 <span>Чаты</span>
             </button>
         </nav>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ВСЕХ ВАЛЮТ -->
+    <div class="modal-overlay" id="all-currencies-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Все валюты</h2>
+                <button class="modal-close" onclick="closeAllCurrenciesModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-description">Доступные валюты для обмена:</p>
+                
+                <div class="all-currencies-list" id="all-currencies-list">
+                    <!-- Заполняется через JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО РАСПРЕДЕЛЕНИЯ ЗАРПЛАТЫ -->
+    <div class="modal-overlay" id="salary-distribution-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Распределение зарплаты</h2>
+                <button class="modal-close" onclick="closeSalaryDistributionModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="salary-dist-intro">
+                    <div class="salary-dist-icon">💰</div>
+                    <p class="salary-dist-text">Настройте автоматическое распределение зарплаты и создайте подушку безопасности!</p>
+                </div>
+
+                <!-- Выбор счёта -->
+                <div class="salary-dist-section">
+                    <label class="transfer-label">На счёт/вклад</label>
+                    <select class="transfer-select" id="salary-target-account">
+                        <option value="maximal">ОТП Максимальный (16.5%) ••4521</option>
+                        <option value="accumulation">Накопительный счёт ••8912</option>
+                        <option value="new">Открыть новый вклад</option>
+                    </select>
+                </div>
+
+                <!-- Тип распределения -->
+                <div class="salary-dist-section">
+                    <label class="transfer-label">Тип распределения</label>
+                    <div class="salary-type-selector">
+                        <label class="salary-type-option">
+                            <input type="radio" name="salary-type" value="percent" checked onchange="toggleSalaryType()">
+                            <div class="salary-type-card">
+                                <span class="salary-type-icon">%</span>
+                                <span class="salary-type-name">Процент</span>
+                                <span class="salary-type-desc">От суммы зарплаты</span>
+                            </div>
+                        </label>
+                        <label class="salary-type-option">
+                            <input type="radio" name="salary-type" value="fixed" onchange="toggleSalaryType()">
+                            <div class="salary-type-card">
+                                <span class="salary-type-icon">₽</span>
+                                <span class="salary-type-name">Сумма</span>
+                                <span class="salary-type-desc">Фиксированная</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Значение -->
+                <div class="salary-dist-section">
+                    <label class="transfer-label" id="salary-value-label">Процент от зарплаты</label>
+                    <div class="salary-value-input-wrapper">
+                        <input type="number" class="salary-value-input" id="salary-value" placeholder="10" value="10">
+                        <span class="salary-value-suffix" id="salary-value-suffix">%</span>
+                    </div>
+                    <div class="salary-value-presets">
+                        <button type="button" class="salary-preset-chip" onclick="setSalaryValue(5)">5%</button>
+                        <button type="button" class="salary-preset-chip" onclick="setSalaryValue(10)">10%</button>
+                        <button type="button" class="salary-preset-chip" onclick="setSalaryValue(15)">15%</button>
+                        <button type="button" class="salary-preset-chip" onclick="setSalaryValue(20)">20%</button>
+                    </div>
+                </div>
+
+                <!-- Прогноз -->
+                <div class="salary-dist-prediction">
+                    <div class="prediction-row">
+                        <span class="prediction-label">При зарплате 85 000 ₽:</span>
+                    </div>
+                    <div class="prediction-row">
+                        <span class="prediction-label">На счёт:</span>
+                        <span class="prediction-value" id="salary-prediction-amount">8 500 ₽</span>
+                    </div>
+                    <div class="prediction-row">
+                        <span class="prediction-label">В месяц:</span>
+                        <span class="prediction-value" id="salary-prediction-monthly">8 500 ₽</span>
+                    </div>
+                    <div class="prediction-row">
+                        <span class="prediction-label">За год:</span>
+                        <span class="prediction-value highlight" id="salary-prediction-yearly">102 000 ₽</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeSalaryDistributionModal()">Позже</button>
+                <button class="btn-primary" onclick="saveSalaryDistribution()">Настроить</button>
+            </div>
+        </div>
     </div>
 
     <!-- Плавающая панель редактирования -->

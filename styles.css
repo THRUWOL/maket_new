@@ -16,6 +16,12 @@
     --light-blue: #6BB6FF;
     --metal: #BAB8BA;
     --white: #FFFFFF;
+    
+    /* Воздушный голубой из брендбука */
+    --airy-blue: #C8E1FC;
+    
+    /* Красный для ошибок */
+    --red: #EF4444;
 
     /* Нейтральные цвета */
     --black: #1A1A1A;
@@ -31,6 +37,16 @@
     --purple-gradient: linear-gradient(135deg, #9E6FC3 0%, #8B5FB8 100%);
     --orange-gradient: linear-gradient(135deg, #FF7D32 0%, #FF6A1D 100%);
     --blue-gradient: linear-gradient(135deg, #4A9FE8 0%, #6BB6FF 100%);
+    
+    /* Пастельные тона из брендбука для фонов иконок */
+    --pink-pastel: #FFD9E8;
+    --blue-pastel: #C8E1FC;
+    --green-pastel: #D4EDDA;
+    --red-pastel: #F8D7DA;
+    --yellow-pastel: #FFF3CD;
+    --purple-pastel: #E8D4FF;
+    --orange-pastel: #FFE8D4;
+    --gray-pastel: #E2E3E5;
 
     /* Тени */
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -103,7 +119,7 @@
 
 /* Уведомление */
 .subscription-alert {
-    background: #FFF3CD;
+    background: var(--yellow-pastel);
     border-radius: var(--radius-md);
     padding: 12px 16px;
     display: flex;
@@ -135,7 +151,7 @@
 }
 
 .alert-btn:hover {
-    background: #E56A1F;
+    background: var(--orange-gradient);
 }
 
 /* Список подписок */
@@ -182,11 +198,12 @@
     flex-shrink: 0;
 }
 
-.yandex-bg { background: #FC3F1D; }
-.ozon-bg { background: #005BFF; }
-.sber-bg { background: #21A038; }
-.netflix-bg { background: #E50914; }
-.mts-bg { background: #E30611; }
+/* Фоны для иконок подписок - используем цвета бренда */
+.yandex-bg { background: var(--orange); }
+.ozon-bg { background: var(--blue); }
+.sber-bg { background: #21A038; } /* Оставляем фирменный цвет Сбера */
+.netflix-bg { background: #E50914; } /* Оставляем фирменный цвет Netflix */
+.mts-bg { background: var(--orange); }
 
 .sub-content {
     flex: 1;
@@ -214,23 +231,24 @@
     border-radius: var(--radius-sm);
 }
 
+/* Статусы подписок - пастельные тона из брендбука */
 .status-active {
-    background: #D4EDDA;
+    background: var(--green-pastel);
     color: #155724;
 }
 
 .status-trial {
-    background: #FFF3CD;
+    background: var(--yellow-pastel);
     color: #856404;
 }
 
 .status-failed {
-    background: #F8D7DA;
+    background: var(--red-pastel);
     color: #721C24;
 }
 
 .status-cancelled {
-    background: #E2E3E5;
+    background: var(--gray-pastel);
     color: #383D41;
 }
 
@@ -300,12 +318,12 @@
 
 .sub-action-btn.cancel-btn {
     background: transparent;
-    color: #FF4444;
-    border: 1px solid #FF4444;
+    color: #EF4444;
+    border: 1px solid #EF4444;
 }
 
 .sub-action-btn.cancel-btn:hover {
-    background: #FF4444;
+    background: #EF4444;
     color: var(--white);
 }
 
@@ -752,14 +770,15 @@
     flex-shrink: 0;
 }
 
-.food-bg { background: #FFD9E8; }
-.transport-bg { background: #C8E1FC; }
-.shop-bg { background: #D4EDDA; }
-.pharmacy-bg { background: #F8D7DA; }
-.gas-bg { background: #FFF3CD; }
-.cinema-bg { background: #E8D4FF; }
-.music-bg { background: #FFE8D4; }
-.utilities-bg { background: #E2E3E5; }
+/* Пастельные фоны для иконок - соответствуют брендбуку */
+.food-bg { background: var(--pink-pastel); }
+.transport-bg { background: var(--blue-pastel); }
+.shop-bg { background: var(--green-pastel); }
+.pharmacy-bg { background: var(--red-pastel); }
+.gas-bg { background: var(--yellow-pastel); }
+.cinema-bg { background: var(--purple-pastel); }
+.music-bg { background: var(--orange-pastel); }
+.utilities-bg { background: var(--gray-pastel); }
 
 .category-info {
     flex: 1;
@@ -1253,12 +1272,13 @@
 }
 
 .favorite-remove {
-    background: #F8D7DA;
+    background: var(--red-pastel);
     color: #721C24;
 }
 
 .favorite-remove:hover {
-    background: #F1AEB5;
+    background: var(--red);
+    color: var(--white);
 }
 
 .contact-add {
@@ -1692,6 +1712,12 @@ body {
     color: var(--black);
 }
 
+.balance-action-mini img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
 /* ========================================
    REFERRAL WIDGET
    ======================================== */
@@ -1870,6 +1896,17 @@ body {
     transition: transform 0.2s;
 }
 
+/* Распределение зарплаты — специальный баннер */
+.salary-promo-banner {
+    background: linear-gradient(135deg, #C1FF05 0%, #A8E500 100%);
+}
+
+.promo-card-arrow {
+    color: inherit;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
 .promo-card-banner:hover {
     transform: translateY(-2px);
 }
@@ -2030,10 +2067,6 @@ body {
     padding: 12px;
     background: var(--white);
     border-radius: var(--radius-md);
-}
-
-.currency-flag {
-    font-size: 24px;
 }
 
 .currency-code {
@@ -2399,12 +2432,13 @@ body {
     flex-shrink: 0;
 }
 
+/* Иконки транзакций - используем цвета бренда */
 .food-icon { background: var(--orange); }
 .transport-icon { background: var(--purple); }
-.salary-icon { background: #9E6FC3; }
-.cafe-icon { background: #D4A574; }
-.shop-icon { background: #FF6B9D; }
-.utilities-icon { background: #4A9FE8; }
+.salary-icon { background: var(--purple); }
+.cafe-icon { background: var(--orange); }
+.shop-icon { background: var(--pink-pastel); color: var(--black); }
+.utilities-icon { background: var(--blue); }
 
 .transaction-details {
     flex: 1;
@@ -2457,6 +2491,135 @@ body {
 /* ========================================
    TRANSFER SCREEN
    ======================================== */
+   
+/* Избранное (частые платежи) */
+.payment-favorites-section {
+    margin-bottom: 24px;
+}
+
+.payment-favorites-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.payment-favorite-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.payment-favorite-item:hover {
+    background: #E8E8E8;
+    transform: translateY(-2px);
+}
+
+.payment-favorite-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+}
+
+/* Цвета для иконок платежей - используем цвета бренда */
+.utilities-bg { background: var(--blue); }
+.mts-bg { background: var(--orange); }
+.yandex-bg { background: var(--orange); }
+.internet-bg { background: var(--purple); }
+
+.payment-favorite-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.payment-favorite-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--black);
+    text-align: center;
+}
+
+.payment-favorite-amount {
+    font-size: 11px;
+    color: var(--gray);
+    font-weight: 500;
+}
+
+/* Автоплатежи мини */
+.autopayments-mini-section {
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.autopayments-mini-section:hover {
+    background: #E8E8E8;
+}
+
+.autopayments-mini-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.autopayments-count {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.autopayments-mini-summary {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.autopayments-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.autopayments-amount {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+/* Блок Перевести */
+.transfer-section {
+    margin-bottom: 20px;
+}
+
+.transfer-section .section-title {
+    margin-bottom: 12px;
+}
+
+.transfer-search-block {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.transfer-search-block .search-input {
+    flex: 1;
+    margin-bottom: 0;
+}
+
 .transfer-promo {
     background: linear-gradient(135deg, #2D1B4E 0%, #4A2C6F 100%);
     border-radius: var(--radius-lg);
@@ -2691,9 +2854,9 @@ input:checked + .toggle-slider:before {
 
 .bell-bg { background: var(--lime); color: var(--black); }
 .wallet-bg { background: var(--purple); }
-.docs-bg { background: #FF6B6B; }
-.chat-bg { background: var(--orange); }
-.help-bg { background: #8B5CF6; }
+.docs-bg { background: var(--orange); }
+.chat-bg { background: var(--blue); }
+.help-bg { background: var(--purple); }
 
 .chat-content {
     flex: 1;
@@ -3462,8 +3625,85 @@ input:checked + .toggle-slider:before {
 }
 
 /* ========================================
+   ALL CURRENCIES MODAL — ВСЕ ВАЛЮТЫ
+   ======================================== */
+
+.all-currencies-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.all-currency-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+    transition: background 0.2s;
+}
+
+.all-currency-item:hover {
+    background: #E8E8E8;
+}
+
+.all-currency-item.selected {
+    background: rgba(158, 111, 195, 0.15);
+    border: 1px solid var(--purple);
+}
+
+.all-currency-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.all-currency-code {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.all-currency-name {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.all-currency-rates {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    text-align: right;
+}
+
+.all-currency-rate-buy,
+.all-currency-rate-sell {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.all-currency-rate-sell {
+    color: var(--gray);
+    font-size: 13px;
+}
+
+/* ========================================
    CURRENCY SETTINGS — НАСТРОЙКА ВАЛЮТ
    ======================================== */
+
+.currency-limit-info {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 12px;
+}
+
+.currency-limit-info strong {
+    color: var(--purple);
+    font-weight: 600;
+}
 
 .currency-selection-list {
     display: flex;
@@ -3479,6 +3719,11 @@ input:checked + .toggle-slider:before {
 
 .currency-selection-item input[type="checkbox"] {
     display: none;
+}
+
+.currency-selection-item input[type="checkbox"]:disabled + .currency-selection-content {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .currency-selection-content {
@@ -3502,7 +3747,60 @@ input:checked + .toggle-slider:before {
 }
 
 .currency-selection-flag {
-    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+/* Флаги валют с цветами бренда */
+.currency-selection-flag.currency-flag-us {
+    background: var(--blue);
+}
+
+.currency-selection-flag.currency-flag-eu {
+    background: var(--purple);
+}
+
+.currency-selection-flag.currency-flag-cn {
+    background: var(--orange);
+}
+
+.currency-selection-flag.currency-flag-gb {
+    background: var(--metal);
+    color: var(--black);
+}
+
+.currency-selection-flag.currency-flag-try {
+    background: var(--red);
+}
+
+.currency-selection-flag.currency-flag-kzt {
+    background: var(--light-blue);
+    color: var(--black);
+}
+
+.currency-selection-flag.currency-flag-byn {
+    background: var(--green-pastel);
+    color: var(--black);
+}
+
+.currency-selection-flag.currency-flag-ae {
+    background: var(--purple);
+}
+
+.currency-selection-flag.currency-flag-th {
+    background: var(--orange);
+}
+
+.currency-selection-flag.currency-flag-in {
+    background: var(--blue);
 }
 
 .currency-selection-name {
@@ -3513,36 +3811,514 @@ input:checked + .toggle-slider:before {
 }
 
 /* ========================================
-   TRANSFER CALCULATOR — КАЛЬКУЛЯТОР ПЕРЕВОДОВ
+   TRANSFER DETAIL SCREEN — ЭКРАН ПЕРЕВОДА
    ======================================== */
 
-.transfer-calculator-content .modal-body {
-    padding: 16px;
+.transfer-detail-recipient {
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 24px;
 }
 
-.calculator-recipient {
+.recipient-logo-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    border-radius: var(--radius-full);
+    background: var(--light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recipient-logo {
+    font-size: 40px;
+}
+
+.recipient-name {
+    display: block;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 8px;
+}
+
+.recipient-bank {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--purple);
+    margin-bottom: 4px;
+}
+
+.recipient-phone {
+    display: block;
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.transfer-detail-section {
+    margin-bottom: 20px;
+}
+
+.transfer-detail-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 12px;
+}
+
+/* Карта */
+.transfer-card-wrapper {
+    display: flex;
+    gap: 12px;
+}
+
+.transfer-card-item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.transfer-card-item.selected {
+    border-color: var(--lime);
+    background: rgba(193, 255, 5, 0.1);
+}
+
+.transfer-card-item:hover {
+    background: #E8E8E8;
+}
+
+.transfer-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+.transfer-card-info {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-bottom: 20px;
-    text-align: center;
 }
 
-.calculator-recipient .recipient-name {
-    font-size: 18px;
+.transfer-card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.transfer-card-number {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.transfer-card-balance {
+    font-size: 14px;
     font-weight: 700;
     color: var(--black);
 }
 
-.calculator-recipient .recipient-details {
-    font-size: 14px;
+/* Поле суммы с калькулятором */
+.amount-input-with-calc {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.amount-input-with-calc .transfer-amount-input {
+    flex: 1;
+    padding: 12px;
+    font-size: 20px;
+}
+
+.calc-icon-btn {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--white);
+    color: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.calc-icon-btn:hover {
+    background: var(--light-gray);
+    border-color: var(--purple);
+}
+
+/* Встроенный калькулятор */
+.embedded-calculator {
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 12px;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.calc-display {
+    background: var(--black);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 12px;
+    text-align: right;
+}
+
+.calc-expression {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    min-height: 16px;
+    margin-bottom: 4px;
+}
+
+.calc-result {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--lime);
+}
+
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.calc-btn-small {
+    aspect-ratio: 1.2;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--white);
+    color: var(--black);
+}
+
+.calc-btn-small:hover {
+    background: #E8E8E8;
+}
+
+.calc-btn-small.calc-btn-op {
+    background: var(--purple);
+    color: var(--white);
+}
+
+.calc-btn-small.calc-btn-op:hover {
+    background: #8B5FB8;
+}
+
+.calc-btn-small.calc-btn-clear {
+    background: #FF4444;
+    color: var(--white);
+}
+
+.calc-btn-small.calc-btn-clear:hover {
+    background: #E63E3E;
+}
+
+.calc-btn-small.calc-btn-equals {
+    grid-column: span 4;
+    aspect-ratio: auto;
+    height: 48px;
+    background: var(--lime-gradient);
+    color: var(--black);
+    font-size: 20px;
+}
+
+.calc-btn-small.calc-btn-equals:hover {
+    background: #A8E500;
+}
+
+/* Итого */
+.transfer-detail-total {
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: 24px;
+    margin-bottom: 20px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.total-row:last-child {
+    border-bottom: none;
+}
+
+.total-row-main {
+    padding-top: 16px;
+    border-top: 2px solid var(--black);
+}
+
+.total-label {
+    font-size: 15px;
     color: var(--gray);
+}
+
+.total-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.total-value.commission-free {
+    color: var(--lime);
+    background: var(--black);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+}
+
+.total-row-main .total-label {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.total-row-main .total-value {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* Footer с кнопкой */
+.transfer-detail-footer {
+    position: sticky;
+    bottom: 0;
+    background: var(--white);
+    padding: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.btn-large {
+    width: 100%;
+    padding: 18px;
+    border-radius: var(--radius-lg);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+/* ========================================
+   SALARY DISTRIBUTION — РАСПРЕДЕЛЕНИЕ ЗАРПЛАТЫ
+   ======================================== */
+
+.salary-dist-intro {
+    text-align: center;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(193, 255, 5, 0.1) 0%, rgba(158, 111, 195, 0.1) 100%);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+}
+
+.salary-dist-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.salary-dist-text {
+    font-size: 14px;
+    color: var(--dark-gray);
+    line-height: 1.5;
+}
+
+.salary-dist-section {
+    margin-bottom: 20px;
+}
+
+/* Выбор типа распределения */
+.salary-type-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.salary-type-option {
+    display: block;
+    cursor: pointer;
+}
+
+.salary-type-option input[type="radio"] {
+    display: none;
+}
+
+.salary-type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 16px;
+    background: var(--light-gray);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.salary-type-option input[type="radio"]:checked + .salary-type-card {
+    border-color: var(--purple);
+    background: rgba(158, 111, 195, 0.1);
+}
+
+.salary-type-card:hover {
+    background: #E8E8E8;
+}
+
+.salary-type-icon {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--purple);
+}
+
+.salary-type-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.salary-type-desc {
+    font-size: 12px;
+    color: var(--gray);
+}
+
+/* Поле ввода значения */
+.salary-value-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.salary-value-input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--font-primary);
+    color: var(--black);
+    text-align: center;
+}
+
+.salary-value-input:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+.salary-value-suffix {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray);
+    padding: 0 8px;
+}
+
+/* Пресеты */
+.salary-value-presets {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.salary-preset-chip {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--white);
+    color: var(--black);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.salary-preset-chip:hover {
+    background: var(--light-gray);
+    border-color: var(--purple);
+}
+
+/* Прогноз */
+.salary-dist-prediction {
+    background: var(--purple-gradient);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    color: var(--white);
+}
+
+.prediction-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.prediction-row:first-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.prediction-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.prediction-value {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.prediction-value.highlight {
+    font-size: 20px;
+    color: var(--lime);
+}
+
+/* ========================================
+   NATIVE CALCULATOR — КАЛЬКУЛЯТОР
+   ======================================== */
+
+.native-calculator-content .modal-body {
+    padding: 16px;
 }
 
 .calculator-display {
     background: var(--black);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    padding: 24px;
     margin-bottom: 20px;
     text-align: right;
 }
@@ -3552,29 +4328,31 @@ input:checked + .toggle-slider:before {
     color: rgba(255, 255, 255, 0.6);
     min-height: 20px;
     margin-bottom: 8px;
+    font-family: 'Onest', sans-serif;
 }
 
 .display-result {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 700;
     color: var(--lime);
+    font-family: 'Onest', sans-serif;
 }
 
 .calculator-buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 10px;
 }
 
 .calc-btn {
-    aspect-ratio: 1.2;
+    aspect-ratio: 1.3;
     border: none;
     border-radius: var(--radius-md);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    font-family: 'Onest', sans-serif;
 }
 
 .calc-btn-op {
@@ -3617,33 +4395,174 @@ input:checked + .toggle-slider:before {
     background: #A8E500;
 }
 
-.transfer-quick-amounts {
+/* ========================================
+   TRANSFER CALCULATOR — КАЛЬКУЛЯТОР ПЕРЕВОДОВ
+   ======================================== */
+
+.transfer-calculator-content .modal-body {
+    padding: 20px;
+}
+
+.calculator-recipient {
     display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding: 8px 0;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 24px;
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
 }
 
-.transfer-quick-amounts::-webkit-scrollbar {
-    display: none;
+.calculator-recipient .recipient-name {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black);
 }
 
-.quick-amount-btn {
-    flex-shrink: 0;
-    padding: 12px 20px;
-    border: 1px solid var(--border);
-    background: var(--white);
-    color: var(--purple);
+.calculator-recipient .recipient-details {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+/* Выбор карты */
+.transfer-card-select {
+    margin-bottom: 16px;
+}
+
+.transfer-label {
+    display: block;
     font-size: 14px;
     font-weight: 600;
+    color: var(--black);
+    margin-bottom: 8px;
+}
+
+.transfer-select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
+    font-size: 15px;
+    font-family: var(--font-primary);
+    color: var(--black);
+    background: var(--white);
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.transfer-select:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+/* Блок суммы */
+.transfer-amount-block {
+    margin-bottom: 16px;
+}
+
+.amount-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.transfer-amount-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--font-primary);
+    color: var(--black);
+    text-align: center;
+}
+
+.transfer-amount-input:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+.amount-currency {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray);
+    padding-right: 8px;
+}
+
+/* Быстрые суммы */
+.quick-amounts-compact {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.quick-amount-chip {
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    background: var(--white);
+    color: var(--black);
+    font-size: 13px;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
 }
 
-.quick-amount-btn:hover {
-    background: rgba(158, 111, 195, 0.1);
+.quick-amount-chip:hover {
+    background: var(--light-gray);
     border-color: var(--purple);
+}
+
+/* Сообщение */
+.transfer-message-block {
+    margin-bottom: 8px;
+}
+
+.transfer-message-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-family: var(--font-primary);
+    color: var(--black);
+}
+
+.transfer-message-input:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+/* Footer с комиссией */
+.transfer-calculator-content .modal-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+}
+
+.transfer-commission-info {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-right: auto;
+}
+
+.commission-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.commission-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--lime);
+    background: var(--black);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
 }
 
 /* ========================================

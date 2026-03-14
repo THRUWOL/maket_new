@@ -463,6 +463,18 @@ document.addEventListener('DOMContentLoaded', function() {
 // ЗАКРЕПЛЁННЫЕ ПОЛУЧАТЕЛИ - НОВЫЕ ФУНКЦИИ
 // ========================================
 
+// Открытие модального окна избранных платежей
+function openPaymentFavoritesModal() {
+    showToast('⚙️ Настройка избранных платежей...');
+    // Здесь будет логика модального окна настройки избранных платежей
+}
+
+// Быстрый платёж из избранного
+function openQuickPayment(merchant, amount) {
+    showToast(`💳 ${merchant}: ${amount} ₽`);
+    // Здесь будет логика быстрого платежа
+}
+
 // Открытие модального окна закреплённых получателей
 function openFavoritesModal() {
     document.getElementById('favorites-modal').classList.add('active');
@@ -809,6 +821,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Инициализация главного экрана
     navigateTo('home-screen');
+    
+    // Инициализация виджета валют
+    initCurrencyWidget();
 });
 
 // ========================================
@@ -863,6 +878,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // ========================================
 // ПОКАЗ УВЕДОМЛЕНИЯ (TOAST)
 // ========================================
+
+// Открытие QR-сканера
+function openQRScanner() {
+    showToast('📷 Открытие сканера QR-кодов...');
+    // Здесь будет логика открытия камеры для сканирования QR
+    // Для мобильного приложения: navigator.mediaDevices.getUserMedia()
+}
 
 function showToast(message) {
     const toast = document.createElement('div');
@@ -1374,30 +1396,92 @@ function navigateToAutopayments() {
 
 // Данные о курсах валют
 const currencyRatesData = {
-    USD: { flag: '🇺🇸', name: 'Доллар США', buy: 73.50, sell: 87.50 },
-    EUR: { flag: '🇪🇺', name: 'Евро', buy: 88.50, sell: 96.50 },
-    CNY: { flag: '🇨🇳', name: 'Китайский юань', buy: 11.10, sell: 12.30 },
-    GBP: { flag: '🇬🇧', name: 'Британский фунт', buy: 92.00, sell: 102.00 },
-    TRY: { flag: '🇹🇷', name: 'Турецкая лира', buy: 2.10, sell: 2.80 },
-    KZT: { flag: '🇰🇿', name: 'Казахский тенге', buy: 0.15, sell: 0.22 },
-    BYN: { flag: '🇧🇾', name: 'Белорусский рубль', buy: 22.50, sell: 26.00 },
-    AED: { flag: '🇦🇪', name: 'Дирхам ОАЭ', buy: 20.00, sell: 24.00 },
-    THB: { flag: '🇹🇭', name: 'Тайский бат', buy: 2.20, sell: 2.90 },
-    INR: { flag: '🇮🇳', name: 'Индийская рупия', buy: 0.85, sell: 1.10 }
+    USD: { symbol: '$', name: 'Доллар США', buy: 73.50, sell: 87.50 },
+    EUR: { symbol: '€', name: 'Евро', buy: 88.50, sell: 96.50 },
+    CNY: { symbol: '¥', name: 'Китайский юань', buy: 11.10, sell: 12.30 },
+    GBP: { symbol: '£', name: 'Британский фунт', buy: 92.00, sell: 102.00 },
+    TRY: { symbol: '₺', name: 'Турецкая лира', buy: 2.10, sell: 2.80 },
+    KZT: { symbol: '₸', name: 'Казахский тенге', buy: 0.15, sell: 0.22 },
+    BYN: { symbol: 'Br', name: 'Белорусский рубль', buy: 22.50, sell: 26.00 },
+    AED: { symbol: 'د.إ', name: 'Дирхам ОАЭ', buy: 20.00, sell: 24.00 },
+    THB: { symbol: '฿', name: 'Тайский бат', buy: 2.20, sell: 2.90 },
+    INR: { symbol: '₹', name: 'Индийская рупия', buy: 0.85, sell: 1.10 }
 };
 
 // Сохранённые валюты пользователя
 let userCurrencies = ['USD', 'EUR', 'CNY'];
+const MAX_CURRENCIES = 3; // Максимум 3 валюты
+
+// Инициализация виджета валют при загрузке
+function initCurrencyWidget() {
+    updateCurrencyWidget();
+}
+
+// Открытие модального окна всех валют
+function openAllCurrenciesModal() {
+    const modal = document.getElementById('all-currencies-modal');
+    const list = document.getElementById('all-currencies-list');
+    
+    // Очищаем и заполняем список
+    list.innerHTML = '';
+    
+    Object.keys(currencyRatesData).forEach(currencyCode => {
+        const currency = currencyRatesData[currencyCode];
+        const isSelected = userCurrencies.includes(currencyCode);
+        
+        const item = document.createElement('div');
+        item.className = 'all-currency-item' + (isSelected ? ' selected' : '');
+        item.innerHTML = `
+            <span class="currency-selection-flag currency-flag-${currencyCode.toLowerCase()}">${currency.symbol}</span>
+            <div class="all-currency-info">
+                <span class="all-currency-code">${currencyCode}</span>
+                <span class="all-currency-name">${currency.name}</span>
+            </div>
+            <div class="all-currency-rates">
+                <span class="all-currency-rate-buy">${currency.buy.toFixed(2)}</span>
+                <span class="all-currency-rate-sell">${currency.sell.toFixed(2)}</span>
+            </div>
+        `;
+        list.appendChild(item);
+    });
+    
+    modal.classList.add('active');
+}
+
+// Закрытие модального окна всех валют
+function closeAllCurrenciesModal() {
+    document.getElementById('all-currencies-modal').classList.remove('active');
+}
 
 // Открытие настройки валют
 function openCurrencySettings() {
     const modal = document.getElementById('currency-settings-modal');
     const checkboxes = modal.querySelectorAll('.currency-selection-item input[type="checkbox"]');
-    
+
     checkboxes.forEach(checkbox => {
         checkbox.checked = userCurrencies.includes(checkbox.value);
     });
-    
+
+    // Добавляем обработчики для ограничения выбора
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const checkedCount = modal.querySelectorAll('input[type="checkbox"]:checked').length;
+            
+            // Блокируем unchecked чекбоксы, если выбрано максимум
+            if (checkedCount >= MAX_CURRENCIES) {
+                checkboxes.forEach(cb => {
+                    if (!cb.checked) {
+                        cb.disabled = true;
+                    }
+                });
+            } else {
+                checkboxes.forEach(cb => {
+                    cb.disabled = false;
+                });
+            }
+        });
+    });
+
     modal.classList.add('active');
 }
 
@@ -1410,18 +1494,23 @@ function closeCurrencySettings() {
 function saveCurrencySettings() {
     const checkboxes = document.querySelectorAll('#currency-selection-list input[type="checkbox"]');
     const selectedCurrencies = [];
-    
+
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
             selectedCurrencies.push(checkbox.value);
         }
     });
-    
+
     if (selectedCurrencies.length === 0) {
         showToast('Выберите хотя бы одну валюту');
         return;
     }
-    
+
+    if (selectedCurrencies.length > MAX_CURRENCIES) {
+        showToast(`Можно выбрать максимум ${MAX_CURRENCIES} валюты`);
+        return;
+    }
+
     userCurrencies = selectedCurrencies;
     updateCurrencyWidget();
     closeCurrencySettings();
@@ -1432,10 +1521,10 @@ function saveCurrencySettings() {
 function updateCurrencyWidget() {
     const currencyList = document.getElementById('currency-list');
     if (!currencyList) return;
-    
+
     // Очищаем текущий список
     currencyList.innerHTML = '';
-    
+
     // Добавляем выбранные валюты
     userCurrencies.forEach(currencyCode => {
         const currency = currencyRatesData[currencyCode];
@@ -1444,7 +1533,7 @@ function updateCurrencyWidget() {
             currencyItem.className = 'currency-item';
             currencyItem.dataset.currency = currencyCode;
             currencyItem.innerHTML = `
-                <div class="currency-flag">${currency.flag}</div>
+                <span class="currency-selection-flag currency-flag-${currencyCode.toLowerCase()}">${currency.symbol}</span>
                 <span class="currency-code">${currencyCode}</span>
                 <div class="currency-rates">
                     <span class="currency-rate">${currency.buy.toFixed(2)}</span>
@@ -1463,77 +1552,67 @@ function updateCurrencyWidget() {
 let calculatorBuffer = [];
 let currentInput = '0';
 
-// Открытие калькулятора для перевода
+// Открытие экрана перевода
 function openTransferCalculator(favoriteName, favoritePhone, favoriteBank) {
     calculatorBuffer = [];
     currentInput = '0';
     
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay active';
-    modal.id = 'transfer-calculator-modal';
-    modal.innerHTML = `
-        <div class="modal-content transfer-calculator-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Перевод ${favoriteName}</h2>
-                <button class="modal-close" onclick="closeTransferCalculator()">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="calculator-recipient">
-                    <span class="recipient-name">${favoriteName}</span>
-                    <span class="recipient-details">${favoriteBank}</span>
-                </div>
-                
-                <div class="calculator-display">
-                    <div class="display-expression" id="calc-expression"></div>
-                    <div class="display-result" id="calc-result">0 ₽</div>
-                </div>
-                
-                <div class="calculator-buttons">
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('7')">7</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('8')">8</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('9')">9</button>
-                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('+')">+</button>
-                    
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('4')">4</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('5')">5</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('6')">6</button>
-                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('-')">−</button>
-                    
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('1')">1</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('2')">2</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('3')">3</button>
-                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('*')">×</button>
-                    
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('0')">0</button>
-                    <button class="calc-btn calc-btn-op" onclick="calculatorInput('00')">00</button>
-                    <button class="calc-btn calc-btn-clear" onclick="calculatorInput('C')">C</button>
-                    <button class="calc-btn calc-btn-action" onclick="calculatorInput('/')">÷</button>
-                    
-                    <button class="calc-btn calc-btn-equals" onclick="calculateResult()">=</button>
-                </div>
-                
-                <div class="transfer-quick-amounts">
-                    <button class="quick-amount-btn" onclick="addAmount(100)">+100</button>
-                    <button class="quick-amount-btn" onclick="addAmount(500)">+500</button>
-                    <button class="quick-amount-btn" onclick="addAmount(1000)">+1000</button>
-                    <button class="quick-amount-btn" onclick="addAmount(5000)">+5000</button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeTransferCalculator()">Отмена</button>
-                <button class="btn-primary" onclick="confirmTransfer('${favoriteName}', '${favoritePhone}', '${favoriteBank}')">Перевести</button>
-            </div>
-        </div>
-    `;
+    // Определяем логотип банка
+    const bankLogos = {
+        'СберБанк': '🟢',
+        'Т-Банк': '🟡',
+        'Альфа-Банк': '🔴',
+        'ВТБ': '🔵'
+    };
+    const bankLogo = bankLogos[favoriteBank] || '🏦';
+
+    navigateTo('transfer-detail-screen');
     
-    document.body.appendChild(modal);
+    // Заполняем данные получателя
+    setTimeout(() => {
+        document.getElementById('transfer-recipient-name').textContent = favoriteName;
+        document.getElementById('transfer-recipient-bank').textContent = favoriteBank;
+        document.getElementById('transfer-recipient-logo').textContent = bankLogo;
+        document.getElementById('transfer-recipient-phone').textContent = favoritePhone;
+    }, 100);
 }
 
 // Закрытие калькулятора
 function closeTransferCalculator() {
-    const modal = document.getElementById('transfer-calculator-modal');
-    if (modal) {
-        modal.remove();
+    // Теперь просто возвращаемся на предыдущий экран
+    navigateTo('transfer-screen');
+}
+
+// Установка суммы
+function setAmount(amount) {
+    const amountInput = document.getElementById('transfer-amount');
+    if (amountInput) {
+        amountInput.value = amount;
+        updateTransferTotal();
+    }
+}
+
+// Обновление итоговой суммы
+function updateTransferTotal() {
+    const amountInput = document.getElementById('transfer-amount');
+    const totalAmountEl = document.getElementById('transfer-total-amount');
+    const finalAmountEl = document.getElementById('transfer-final-amount');
+    
+    const amount = amountInput ? parseInt(amountInput.value) || 0 : 0;
+    
+    if (totalAmountEl) {
+        totalAmountEl.textContent = `${amount.toLocaleString('ru-RU')} ₽`;
+    }
+    if (finalAmountEl) {
+        finalAmountEl.textContent = `${amount.toLocaleString('ru-RU')} ₽`;
+    }
+}
+
+// Переключение калькулятора
+function toggleCalculator() {
+    const calculator = document.getElementById('embedded-calculator');
+    if (calculator) {
+        calculator.style.display = calculator.style.display === 'none' ? 'block' : 'none';
     }
 }
 
@@ -1541,15 +1620,15 @@ function closeTransferCalculator() {
 function calculatorInput(value) {
     const expressionEl = document.getElementById('calc-expression');
     const resultEl = document.getElementById('calc-result');
-    
+
     if (value === 'C') {
         calculatorBuffer = [];
         currentInput = '0';
         expressionEl.textContent = '';
-        resultEl.textContent = '0 ₽';
+        resultEl.textContent = '0';
         return;
     }
-    
+
     if (['+', '-', '*', '/'].includes(value)) {
         if (currentInput !== '0') {
             calculatorBuffer.push(currentInput);
@@ -1565,55 +1644,86 @@ function calculatorInput(value) {
         } else {
             currentInput += value;
         }
-        resultEl.textContent = `${parseInt(currentInput).toLocaleString('ru-RU')} ₽`;
+        resultEl.textContent = currentInput;
     }
-}
-
-// Быстрое добавление суммы
-function addAmount(amount) {
-    calculatorInput(amount.toString());
 }
 
 // Вычисление результата
 function calculateResult() {
     const expressionEl = document.getElementById('calc-expression');
     const resultEl = document.getElementById('calc-result');
-    
+    const amountInput = document.getElementById('transfer-amount');
+
     if (currentInput !== '0') {
         calculatorBuffer.push(currentInput);
     }
-    
+
     if (calculatorBuffer.length === 0) return;
-    
+
     const expression = calculatorBuffer.join(' ');
     expressionEl.textContent = expression + ' =';
-    
+
     try {
-        // Безопасное вычисление
         const result = eval(expression.replace(/[^0-9+\-*/.]/g, ''));
-        currentInput = Math.round(result).toString();
-        resultEl.textContent = `${Math.round(result).toLocaleString('ru-RU')} ₽`;
+        const roundedResult = Math.round(result);
+        currentInput = roundedResult.toString();
+        resultEl.textContent = roundedResult;
+        
+        // Автоматически вставляем результат в поле суммы
+        if (amountInput) {
+            amountInput.value = roundedResult;
+            updateTransferTotal();
+        }
     } catch (e) {
         resultEl.textContent = 'Ошибка';
         currentInput = '0';
     }
-    
+
     calculatorBuffer = [];
 }
 
+// Применение результата калькулятора
+function applyCalculatorResult() {
+    // Результат уже применён в calculateResult(), просто закрываем калькулятор
+    toggleCalculator();
+}
+
 // Подтверждение перевода
-function confirmTransfer(name, phone, bank) {
-    const resultEl = document.getElementById('calc-result');
-    const amountText = resultEl.textContent.replace(/[^0-9]/g, '');
-    const amount = parseInt(amountText);
+function confirmTransfer() {
+    const amountInput = document.getElementById('transfer-amount');
+    const messageInput = document.getElementById('transfer-message');
+    const recipientName = document.getElementById('transfer-recipient-name').textContent;
+    
+    const amount = amountInput ? parseInt(amountInput.value) : 0;
     
     if (!amount || amount <= 0) {
         showToast('Введите сумму перевода');
         return;
     }
     
-    closeTransferCalculator();
-    showToast(`✅ Перевод ${amount.toLocaleString('ru-RU')} ₽ → ${name}`);
+    const message = messageInput ? messageInput.value : '';
+    
+    let confirmationMsg = `✅ Перевод ${amount.toLocaleString('ru-RU')} ₽ → ${recipientName}`;
+    if (message) {
+        confirmationMsg += `\n💬 Сообщение: ${message}`;
+    }
+    
+    showToast(confirmationMsg);
+    
+    // Предлагаем настроить распределение зарплаты при крупном переводе на счёт
+    if (amount >= 10000) {
+        setTimeout(() => {
+            const shouldSetup = confirm('💰 Хотите настроить автоматическое распределение зарплаты?\n\nВы делаете крупные переводы на счёт. Настройте автопополнение в день зарплаты!');
+            if (shouldSetup) {
+                openSalaryDistributionModal();
+            }
+        }, 1000);
+    }
+    
+    // Возврат на главный экран
+    setTimeout(() => {
+        navigateTo('home-screen');
+    }, 1500);
 }
 
 // Обновлённая функция quickTransfer для открытия калькулятора
@@ -1680,7 +1790,9 @@ window.OTPBankApp = {
     // Калькулятор переводов
     openTransferCalculator,
     closeTransferCalculator,
-    quickTransfer
+    quickTransfer,
+    // QR-сканер
+    openQRScanner
 };
 
 // ========================================
@@ -2154,15 +2266,129 @@ window.OTPBankApp = {
     openCurrencySettings,
     closeCurrencySettings,
     saveCurrencySettings,
+    initCurrencyWidget,
+    openAllCurrenciesModal,
+    closeAllCurrenciesModal,
     // Калькулятор переводов
     openTransferCalculator,
     closeTransferCalculator,
     quickTransfer,
+    // QR-сканер
+    openQRScanner,
+    // Платежи
+    openPaymentFavoritesModal,
+    openQuickPayment,
     // Конструктор экрана
     toggleEditMode,
     cancelEditMode,
-    saveEditMode
+    saveEditMode,
+    // Переводы
+    toggleCalculator,
+    calculatorInput,
+    calculateResult,
+    applyCalculatorResult,
+    updateTransferTotal,
+    // Распределение зарплаты
+    openSalaryDistributionModal,
+    closeSalaryDistributionModal,
+    toggleSalaryType,
+    setSalaryValue,
+    saveSalaryDistribution
 };
+
+// ========================================
+// РАСПРЕДЕЛЕНИЕ ЗАРПЛАТЫ — ФУНКЦИИ
+// ========================================
+
+const SALARY_AMOUNT = 85000; // Предполагаемая зарплата
+
+// Открытие модального окна распределения зарплаты
+function openSalaryDistributionModal() {
+    updateSalaryPrediction();
+    document.getElementById('salary-distribution-modal').classList.add('active');
+}
+
+// Закрытие модального окна
+function closeSalaryDistributionModal() {
+    document.getElementById('salary-distribution-modal').classList.remove('active');
+}
+
+// Переключение типа распределения
+function toggleSalaryType() {
+    const isPercent = document.querySelector('input[name="salary-type"][value="percent"]').checked;
+    const label = document.getElementById('salary-value-label');
+    const suffix = document.getElementById('salary-value-suffix');
+    const presets = document.querySelectorAll('.salary-preset-chip');
+    
+    if (isPercent) {
+        label.textContent = 'Процент от зарплаты';
+        suffix.textContent = '%';
+        presets.forEach((chip, index) => {
+            chip.textContent = [5, 10, 15, 20][index] + '%';
+            chip.onclick = function() { setSalaryValue([5, 10, 15, 20][index]); };
+        });
+    } else {
+        label.textContent = 'Сумма';
+        suffix.textContent = '₽';
+        presets.forEach((chip, index) => {
+            const values = [5000, 10000, 15000, 20000];
+            chip.textContent = values[index].toLocaleString('ru-RU') + ' ₽';
+            chip.onclick = function() { setSalaryValue(values[index]); };
+        });
+    }
+    
+    updateSalaryPrediction();
+}
+
+// Установка значения
+function setSalaryValue(value) {
+    document.getElementById('salary-value').value = value;
+    updateSalaryPrediction();
+}
+
+// Обновление прогноза
+function updateSalaryPrediction() {
+    const isPercent = document.querySelector('input[name="salary-type"][value="percent"]').checked;
+    const value = parseInt(document.getElementById('salary-value').value) || 0;
+    
+    let monthlyAmount;
+    if (isPercent) {
+        monthlyAmount = Math.round(SALARY_AMOUNT * (value / 100));
+    } else {
+        monthlyAmount = value;
+    }
+    
+    const yearlyAmount = monthlyAmount * 12;
+    
+    document.getElementById('salary-prediction-amount').textContent = monthlyAmount.toLocaleString('ru-RU') + ' ₽';
+    document.getElementById('salary-prediction-monthly').textContent = monthlyAmount.toLocaleString('ru-RU') + ' ₽';
+    document.getElementById('salary-prediction-yearly').textContent = yearlyAmount.toLocaleString('ru-RU') + ' ₽';
+}
+
+// Сохранение настроек
+function saveSalaryDistribution() {
+    const isPercent = document.querySelector('input[name="salary-type"][value="percent"]').checked;
+    const value = parseInt(document.getElementById('salary-value').value) || 0;
+    const targetAccount = document.getElementById('salary-target-account').value;
+    
+    if (value <= 0) {
+        showToast('Введите значение больше 0');
+        return;
+    }
+    
+    closeSalaryDistributionModal();
+    
+    const typeText = isPercent ? `${value}% от зарплаты` : `${value.toLocaleString('ru-RU')} ₽`;
+    showToast(`✅ Распределение настроено: ${typeText}`);
+}
+
+// Добавляем обработчик на изменение суммы
+document.addEventListener('DOMContentLoaded', function() {
+    const amountInput = document.getElementById('transfer-amount');
+    if (amountInput) {
+        amountInput.addEventListener('input', updateTransferTotal);
+    }
+});
 
 console.log('%c ОТП Банк Онлайн ', 'background: #C1FF05; color: #000; font-size: 16px; font-weight: bold; padding: 8px 16px; border-radius: 4px;');
 console.log('%c Версия приложения: 2.0.0 (Светлая тема) ', 'color: #8C8C8C; font-size: 12px;');
