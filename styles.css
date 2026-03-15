@@ -168,7 +168,8 @@
     padding: 16px;
     display: flex;
     gap: 12px;
-    align-items: flex-start;
+    align-items: center;
+    cursor: pointer;
     transition: background 0.2s, transform 0.2s;
 }
 
@@ -201,8 +202,8 @@
 /* Фоны для иконок подписок - используем цвета бренда */
 .yandex-bg { background: var(--orange); }
 .ozon-bg { background: var(--blue); }
-.sber-bg { background: #21A038; } /* Оставляем фирменный цвет Сбера */
-.netflix-bg { background: #E50914; } /* Оставляем фирменный цвет Netflix */
+.sber-bg { background: #21A038; }
+.netflix-bg { background: #E50914; }
 .mts-bg { background: var(--orange); }
 
 .sub-content {
@@ -268,68 +269,20 @@
     color: var(--gray);
 }
 
-.sub-date.trial-warning {
-    color: var(--orange);
-    font-weight: 600;
-}
-
-.sub-features {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.sub-feature {
-    font-size: 12px;
-    background: var(--white);
-    padding: 4px 8px;
-    border-radius: var(--radius-sm);
-    color: var(--dark-gray);
-}
-
-.sub-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sub-action-btn {
-    border: none;
-    padding: 8px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
+/* Стрелка справа */
+.sub-arrow {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
+    color: var(--gray);
+    flex-shrink: 0;
 }
 
-.sub-action-btn.notify-on {
-    background: var(--lime);
-    color: var(--black);
-}
-
-.sub-action-btn.notify-alert {
-    background: var(--orange);
-    color: var(--white);
-}
-
-.sub-action-btn.cancel-btn {
-    background: transparent;
-    color: #EF4444;
-    border: 1px solid #EF4444;
-}
-
-.sub-action-btn.cancel-btn:hover {
-    background: #EF4444;
-    color: var(--white);
-}
-
-.sub-action-btn.update-card {
-    background: var(--purple);
-    color: var(--white);
+/* Убираем старые стили действий */
+.sub-actions,
+.sub-action-btn,
+.sub-features,
+.sub-feature {
+    display: none;
 }
 
 /* Статистика */
@@ -528,6 +481,169 @@
 
 .btn-danger:hover {
     background: #E63E3E;
+}
+
+/* ========================================
+   ДЕТАЛИ ПОДПИСКИ - МОДАЛЬНОЕ ОКНО
+   ======================================== */
+
+.sub-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.sub-detail-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--orange);
+    color: var(--white);
+    font-size: 28px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sub-detail-status {
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    background: var(--green-pastel);
+    color: #155724;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sub-detail-amount {
+    text-align: center;
+    padding: 20px;
+    background: var(--purple-gradient);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+}
+
+.sub-detail-amount-value {
+    display: block;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.sub-detail-amount-period {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.sub-detail-info {
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.sub-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.sub-detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sub-detail-row:first-child {
+    padding-top: 0;
+}
+
+.sub-detail-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.sub-detail-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+    text-align: right;
+}
+
+.sub-detail-features,
+.sub-detail-history {
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.sub-detail-features-title,
+.sub-detail-history-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 12px;
+}
+
+.sub-detail-features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.feature-item {
+    font-size: 14px;
+    color: var(--dark-gray);
+    padding: 8px 12px;
+    background: var(--white);
+    border-radius: var(--radius-sm);
+}
+
+.sub-detail-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: var(--white);
+    border-radius: var(--radius-md);
+}
+
+.history-date {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.history-amount {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.history-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.history-status.success {
+    background: var(--green-pastel);
+    color: #155724;
+}
+
+.history-status.failed {
+    background: var(--red-pastel);
+    color: #721C24;
 }
 
 /* Детали кэшбэка */

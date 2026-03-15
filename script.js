@@ -52,6 +52,153 @@ function updateNavActiveState(screenId) {
 
 let currentCancelSubId = null;
 let currentCancelSubName = '';
+let currentDetailSubId = null;
+
+// Данные подписок
+const subscriptionsData = {
+    1: {
+        name: 'Яндекс Плюс',
+        icon: 'Я',
+        iconBg: 'var(--orange)',
+        amount: '299 ₽',
+        date: '25.03.2026',
+        category: 'Развлечения',
+        started: '15.01.2025',
+        status: 'Активна',
+        statusClass: 'status-active',
+        features: ['🎬 Кино и сериалы', '🎵 Музыка', '📚 Книги', '🎮 Игры'],
+        notify: true
+    },
+    2: {
+        name: 'OZON Premium',
+        icon: 'O',
+        iconBg: 'var(--blue)',
+        amount: '199 ₽',
+        date: '28.03.2026',
+        category: 'Шопинг',
+        started: '10.02.2025',
+        status: 'Активна',
+        statusClass: 'status-active',
+        features: ['🛍️ Кэшбэк баллами', '🚚 Бесплатная доставка', '🎫 Скидки партнёров', '📺 Ozon ТВ'],
+        notify: true
+    },
+    3: {
+        name: 'СберПрайм',
+        icon: 'С',
+        iconBg: '#21A038',
+        amount: '0 ₽',
+        date: 'до 10.04.2026',
+        category: 'Развлечения',
+        started: '10.03.2026',
+        status: 'Пробный 30 дней',
+        statusClass: 'status-trial',
+        features: ['🎬 Кино', '🎵 Музыка', '📚 Книги', '🍕 Скидки на еду'],
+        notify: true
+    },
+    4: {
+        name: 'Netflix',
+        icon: 'N',
+        iconBg: '#E50914',
+        amount: '799 ₽',
+        date: '15.02.2026',
+        category: 'Развлечения',
+        started: '20.06.2024',
+        status: 'Ошибка оплаты',
+        statusClass: 'status-failed',
+        features: ['🎬 Фильмы и сериалы', '📺 Оригинальный контент', '🌍 На разных языках', '📱 На любом устройстве'],
+        notify: false
+    },
+    5: {
+        name: 'МТС Premium',
+        icon: 'М',
+        iconBg: 'var(--orange)',
+        amount: '349 ₽',
+        date: '05.04.2026',
+        category: 'Связь',
+        started: '05.01.2025',
+        status: 'Активна',
+        statusClass: 'status-active',
+        features: ['📱 Связь безлимит', '🎵 Музыка', '🎬 Кино', '📚 Книги'],
+        notify: true
+    }
+};
+
+// Открытие деталей подписки
+function openSubscriptionDetail(subId) {
+    currentDetailSubId = subId;
+    const data = subscriptionsData[subId];
+    if (!data) return;
+
+    // Заполняем данные
+    document.getElementById('sub-detail-name').textContent = data.name;
+    document.getElementById('sub-detail-icon-text').textContent = data.icon;
+    document.getElementById('sub-detail-icon').style.background = data.iconBg;
+    document.getElementById('sub-detail-amount').textContent = data.amount;
+    document.getElementById('sub-detail-date').textContent = data.date;
+    document.getElementById('sub-detail-category').textContent = data.category;
+    document.getElementById('sub-detail-started').textContent = data.started;
+    
+    const statusEl = document.getElementById('sub-detail-status');
+    statusEl.querySelector('span').textContent = data.status;
+    statusEl.className = 'sub-detail-status ' + data.statusClass;
+
+    // Преимущества
+    const featuresContainer = document.getElementById('sub-detail-features');
+    featuresContainer.innerHTML = data.features.map(f => `<div class="feature-item">${f}</div>`).join('');
+
+    // Кнопка уведомления
+    const notifyBtn = document.getElementById('sub-detail-toggle-notify');
+    if (data.notify) {
+        notifyBtn.textContent = '🔔 Вкл';
+        notifyBtn.classList.add('notify-on');
+    } else {
+        notifyBtn.textContent = '🔕 Выкл';
+        notifyBtn.classList.remove('notify-on');
+    }
+
+    document.getElementById('subscription-detail-modal').classList.add('active');
+}
+
+// Закрытие деталей подписки
+function closeSubscriptionDetail() {
+    document.getElementById('subscription-detail-modal').classList.remove('active');
+    currentDetailSubId = null;
+}
+
+// Переключение уведомления в деталях
+function toggleSubDetailNotify() {
+    if (!currentDetailSubId) return;
+    
+    const data = subscriptionsData[currentDetailSubId];
+    data.notify = !data.notify;
+    
+    const notifyBtn = document.getElementById('sub-detail-toggle-notify');
+    if (data.notify) {
+        notifyBtn.textContent = '🔔 Вкл';
+        showToast('Уведомления включены');
+    } else {
+        notifyBtn.textContent = '🔕 Выкл';
+        showToast('Уведомления выключены');
+    }
+}
+
+// Открытие отмены из деталей
+function openCancelFromDetail() {
+    if (!currentDetailSubId) return;
+    
+    // Сохраняем ID перед закрытием
+    const subId = currentDetailSubId;
+    const data = subscriptionsData[subId];
+    console.log('Открытие отмены из деталей, ID:', subId, 'Name:', data.name);
+    
+    // Закрываем модальное окно деталей
+    closeSubscriptionDetail();
+    
+    // Открываем модальное окно отмены с правильным ID
+    setTimeout(() => {
+        openCancelModal(data.name, subId);
+    }, 100);
+}
 
 // Открытие модального окна отмены подписки
 function openCancelModal(subName, subId) {
@@ -73,28 +220,139 @@ function closeCancelModal() {
 // Подтверждение отмены подписки
 function confirmCancelSubscription() {
     const reason = document.getElementById('cancel-reason-select').value;
-    
+
+    console.log('Отмена подписки:', currentCancelSubId, currentCancelSubName);
+
     // Находим элемент подписки и помечаем как отменённую
     const subItem = document.querySelector(`.subscription-item[data-id="${currentCancelSubId}"]`);
     if (subItem) {
-        subItem.style.opacity = '0.5';
-        subItem.style.pointerEvents = 'none';
+        console.log('Найдена подписка:', subItem);
+        
+        // Сохраняем оригинальный статус перед отменой
+        const originalStatus = subscriptionsData[currentCancelSubId]?.status || 'Активна';
+        const originalStatusClass = subscriptionsData[currentCancelSubId]?.statusClass || 'status-active';
+        
+        // Делаем подписку "потухшей" - применяем стили явно
+        subItem.style.cssText = 'opacity: 0.5; background: #E2E3E5; pointer-events: auto; filter: grayscale(100%); cursor: default;';
+        
+        // Добавляем кнопку возобновления
+        const cancelBtn = subItem.querySelector('.sub-arrow');
+        if (cancelBtn) {
+            cancelBtn.innerHTML = `
+                <button class="sub-restore-btn" onclick="restoreSubscription(${currentCancelSubId})" style="
+                    background: var(--lime);
+                    border: none;
+                    padding: 8px 12px;
+                    border-radius: var(--radius-sm);
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    color: var(--black);
+                " onmouseover="this.style.background='var(--lime-gradient)'" onmouseout="this.style.background='var(--lime)'">
+                    ↺ Вернуть
+                </button>
+            `;
+        }
         
         // Обновляем статус
         const statusEl = subItem.querySelector('.sub-status');
         if (statusEl) {
             statusEl.textContent = 'Отменена';
-            statusEl.className = 'sub-status status-cancelled';
             statusEl.style.background = '#E2E3E5';
             statusEl.style.color = '#383D41';
         }
+        
+        // Обновляем данные в объекте - сохраняем оригинальный статус
+        if (subscriptionsData[currentCancelSubId]) {
+            subscriptionsData[currentCancelSubId].originalStatus = originalStatus;
+            subscriptionsData[currentCancelSubId].originalStatusClass = originalStatusClass;
+            subscriptionsData[currentCancelSubId].status = 'Отменена';
+            subscriptionsData[currentCancelSubId].statusClass = 'status-cancelled';
+            subscriptionsData[currentCancelSubId].cancelled = true;
+        }
+    } else {
+        console.log('Подписка не найдена!');
     }
-    
+
     closeCancelModal();
     showToast(`Подписка "${currentCancelSubName}" отменена`);
-    
+
     // Обновляем сумму в сводке
-    updateSubscriptionsSummary();
+    setTimeout(() => {
+        updateSubscriptionsSummary();
+    }, 100);
+}
+
+// Возобновление отменённой подписки
+function restoreSubscription(subId) {
+    const data = subscriptionsData[subId];
+    if (!data) return;
+    
+    console.log('Возобновление подписки:', subId, data.name);
+    
+    const subItem = document.querySelector(`.subscription-item[data-id="${subId}"]`);
+    if (subItem) {
+        // Возвращаем нормальные стили
+        subItem.style.cssText = 'opacity: 1; background: var(--light-gray); pointer-events: auto; filter: grayscale(0%); cursor: pointer;';
+        
+        // Восстанавливаем стрелку
+        const arrowEl = subItem.querySelector('.sub-arrow');
+        if (arrowEl) {
+            arrowEl.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            `;
+        }
+        
+        // Обновляем статус - возвращаем оригинальный
+        const statusEl = subItem.querySelector('.sub-status');
+        if (statusEl) {
+            // Используем сохранённый оригинальный статус или дефолтный
+            const restoreStatus = data.originalStatus || getOriginalStatus(subId);
+            const restoreClass = data.originalStatusClass || getOriginalStatusClass(subId);
+            
+            statusEl.textContent = restoreStatus;
+            statusEl.className = 'sub-status ' + restoreClass;
+            statusEl.style.background = '';
+            statusEl.style.color = '';
+        }
+        
+        // Обновляем данные в объекте
+        data.cancelled = false;
+        data.status = data.originalStatus || getOriginalStatus(subId);
+        data.statusClass = data.originalStatusClass || getOriginalStatusClass(subId);
+    }
+    
+    showToast(`✅ Подписка "${data.name}" возобновлена`);
+    
+    // Обновляем сумму в сводке с небольшой задержкой
+    setTimeout(() => {
+        updateSubscriptionsSummary();
+    }, 100);
+}
+
+// Получение оригинального статуса для подписки
+function getOriginalStatus(subId) {
+    const statuses = {
+        1: 'Активна',
+        2: 'Активна',
+        3: 'Пробный 30 дней',
+        4: 'Ошибка оплаты',
+        5: 'Активна'
+    };
+    return statuses[subId] || 'Активна';
+}
+
+function getOriginalStatusClass(subId) {
+    const statusClasses = {
+        1: 'status-active',
+        2: 'status-active',
+        3: 'status-trial',
+        4: 'status-failed',
+        5: 'status-active'
+    };
+    return statusClasses[subId] || 'status-active';
 }
 
 // Открытие модального окна добавления подписки
@@ -194,28 +452,47 @@ function getCategoryName(category) {
 
 // Обновление сводки подписок
 function updateSubscriptionsSummary() {
-    const activeSubs = document.querySelectorAll('.subscription-item.active:not([style*="opacity: 0.5"])');
+    const allSubs = document.querySelectorAll('.subscription-item');
     let totalAmount = 0;
-    
-    activeSubs.forEach(sub => {
+    let activeCount = 0;
+
+    allSubs.forEach(sub => {
+        const subId = parseInt(sub.dataset.id);
+        const subData = subscriptionsData[subId];
+        
+        // Пропускаем отменённые
+        if (subData && subData.cancelled) {
+            console.log('Пропускаем отменённую:', subData.name);
+            return;
+        }
+        
+        // Также проверяем opacity для совместимости
+        const computedStyle = window.getComputedStyle(sub);
+        const opacity = parseFloat(computedStyle.opacity);
+        if (opacity < 1) return;
+        
+        activeCount++;
         const amountEl = sub.querySelector('.sub-amount');
         if (amountEl) {
             const match = amountEl.textContent.match(/(\d+)/);
             if (match) {
                 totalAmount += parseInt(match[1]);
+                console.log('Добавляем:', amountEl.textContent, '=>', totalAmount);
             }
         }
     });
-    
+
+    console.log('Итого:', totalAmount, 'активных:', activeCount);
+
     const summaryAmount = document.querySelector('.summary-amount');
     const statValue = document.querySelector('.stat-item .stat-value');
-    
+
     if (summaryAmount) {
         summaryAmount.textContent = `${totalAmount.toLocaleString('ru-RU')} ₽`;
     }
-    
+
     if (statValue) {
-        statValue.textContent = activeSubs.length;
+        statValue.textContent = activeCount;
     }
 }
 
@@ -1187,6 +1464,8 @@ function openAutopayOfferModal(recipient, amount) {
 function closeAutopayOfferModal() {
     document.getElementById('autopay-offer-modal').classList.remove('active');
     currentAutopayOffer = null;
+    // Сохраняем что пользователь видел предложение
+    localStorage.setItem('autopayOfferShown', 'true');
 }
 
 // Переход к настройке автоплатежа
@@ -2060,18 +2339,21 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('click', function() {
             const merchant = this.querySelector('.transaction-merchant');
             const amount = this.querySelector('.amount-value');
-            
+
             if (merchant && amount) {
                 const merchantName = merchant.textContent;
                 const amountText = amount.textContent.replace(/[^0-9]/g, '');
                 const amountValue = parseInt(amountText) || 1000;
-                
+
                 // Проверяем, не является ли это доходом
                 if (!amount.classList.contains('positive')) {
-                    // Показываем предложение автоплатежа после просмотра транзакции
-                    setTimeout(() => {
-                        openAutopayOfferModal(merchantName, amountValue);
-                    }, 500);
+                    // Показываем предложение автоплатежа только если ещё не показывали
+                    const offerShown = localStorage.getItem('autopayOfferShown');
+                    if (!offerShown) {
+                        setTimeout(() => {
+                            openAutopayOfferModal(merchantName, amountValue);
+                        }, 500);
+                    }
                 }
             }
         });
