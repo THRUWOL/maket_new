@@ -3869,6 +3869,85 @@ input:checked + .toggle-slider:before {
     margin-bottom: 12px;
 }
 
+/* Кнопка выбора категории */
+.category-select-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--light-gray);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.category-select-btn:hover {
+    background: #E8E8E8;
+    border-color: var(--purple);
+}
+
+.category-select-btn:active {
+    transform: scale(0.98);
+}
+
+.category-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.category-name {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--black);
+}
+
+/* ========================================
+   МОДАЛЬНОЕ ОКНО ВЫБОРА КАТЕГОРИИ
+   ======================================== */
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.category-grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.category-grid-item:hover {
+    background: #E8E8E8;
+    transform: translateY(-2px);
+}
+
+.category-grid-item:active {
+    transform: scale(0.95);
+}
+
+.category-grid-icon {
+    font-size: 32px;
+}
+
+.category-grid-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--black);
+    text-align: center;
+}
+
 /* Карта */
 .transfer-card-wrapper {
     display: flex;
@@ -4563,6 +4642,519 @@ input:checked + .toggle-slider:before {
     background: var(--black);
     padding: 4px 12px;
     border-radius: var(--radius-full);
+}
+
+/* ========================================
+   ЭКРАН ДЕТАЛЕЙ ТРАНЗАКЦИИ
+   ======================================== */
+
+.transaction-detail-header {
+    background: var(--purple-gradient);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.transaction-detail-amount-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.transaction-detail-amount {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.transaction-detail-cashback {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+}
+
+.transaction-detail-category {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 16px;
+    border-radius: var(--radius-full);
+}
+
+.detail-category-icon {
+    font-size: 20px;
+}
+
+.detail-category-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+}
+
+/* Секции с информацией */
+.transaction-detail-section {
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-row:first-child {
+    padding-top: 0;
+}
+
+.detail-label {
+    font-size: 14px;
+    color: var(--gray);
+}
+
+.detail-value {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--black);
+    text-align: right;
+}
+
+.detail-value.status-completed {
+    color: #28A745;
+    background: #D4EDDA;
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+}
+
+/* Секция с геолокацией */
+.location-section {
+    padding: 16px;
+}
+
+.location-row {
+    margin-bottom: 12px;
+}
+
+.location-map {
+    background: var(--white);
+    border-radius: var(--radius-md);
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.location-map-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray);
+}
+
+.location-map-placeholder svg {
+    color: var(--purple);
+}
+
+.location-map-placeholder span {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Карточка кэшбэка */
+.cashback-detail-card {
+    background: var(--lime-gradient);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.cashback-detail-icon {
+    font-size: 32px;
+}
+
+.cashback-detail-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cashback-detail-label {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.cashback-detail-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.cashback-detail-desc {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+/* Секция автоплатежа */
+.autopay-section {
+    background: linear-gradient(135deg, #E8D4FF 0%, #C8E1FC 100%);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.autopay-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.autopay-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--purple);
+    flex-shrink: 0;
+}
+
+.autopay-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.autopay-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.autopay-subtitle {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.autopay-desc {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.btn-autopay {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--purple);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-autopay:hover {
+    background: #8B5FB8;
+}
+
+/* Кнопки действий */
+.transaction-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: var(--light-gray);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    background: #E8E8E8;
+    transform: translateY(-2px);
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.action-btn svg {
+    color: var(--black);
+}
+
+.action-btn span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--black);
+    text-align: center;
+}
+
+/* ========================================
+   МОДАЛЬНОЕ ОКНО АВТОПЛАТЕЖА
+   ======================================== */
+
+.autopay-modal-intro {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.autopay-modal-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.autopay-modal-text {
+    font-size: 15px;
+    color: var(--dark-gray);
+}
+
+.autopay-field {
+    margin-bottom: 16px;
+}
+
+.autopay-field:last-child {
+    margin-bottom: 0;
+}
+
+.autopay-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 8px;
+}
+
+.autopay-recipient {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+}
+
+.autopay-recipient-icon {
+    font-size: 24px;
+}
+
+.autopay-recipient-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.autopay-amount-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.autopay-amount-input {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: 18px;
+    font-weight: 600;
+    font-family: var(--font-primary);
+}
+
+.autopay-amount-input:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+.autopay-currency {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.autopay-frequency {
+    display: flex;
+    gap: 12px;
+}
+
+.frequency-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.frequency-option:hover {
+    background: #E8E8E8;
+}
+
+.frequency-option input[type="radio"] {
+    accent-color: var(--purple);
+}
+
+.frequency-icon {
+    font-size: 20px;
+}
+
+.frequency-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+}
+
+.autopay-select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    font-size: 15px;
+    font-family: var(--font-primary);
+    background: var(--white);
+    cursor: pointer;
+}
+
+.autopay-select:focus {
+    outline: none;
+    border-color: var(--purple);
+}
+
+.autopay-card-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--light-gray);
+    border-radius: var(--radius-lg);
+}
+
+.autopay-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    flex-shrink: 0;
+}
+
+.autopay-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.autopay-card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.autopay-card-number {
+    font-size: 13px;
+    color: var(--gray);
+}
+
+.autopay-card-balance {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--black);
+}
+
+.autopay-notifications {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.autopay-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.autopay-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--purple);
+}
+
+.checkbox-text {
+    font-size: 15px;
+    color: var(--black);
+}
+
+.autopay-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--blue-pastel);
+    border-radius: var(--radius-md);
+    margin-top: 16px;
+}
+
+.autopay-info-icon {
+    font-size: 24px;
+}
+
+.autopay-info-text {
+    font-size: 14px;
+    color: var(--dark-gray);
+    line-height: 1.5;
+}
+
+.autopay-info-text strong {
+    color: var(--black);
+    font-weight: 600;
 }
 
 /* ========================================

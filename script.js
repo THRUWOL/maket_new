@@ -1688,28 +1688,280 @@ function applyCalculatorResult() {
     toggleCalculator();
 }
 
+// ========================================
+// ВЫБОР КАТЕГОРИИ ПЕРЕВОДА
+// ========================================
+
+let selectedTransferCategory = {
+    id: 'transfers',
+    icon: '💸',
+    name: 'Переводы'
+};
+
+// Открытие модального окна выбора категории
+function openCategoryModal() {
+    document.getElementById('transfer-category-modal').classList.add('active');
+}
+
+// Закрытие модального окна выбора категории
+function closeCategoryModal() {
+    document.getElementById('transfer-category-modal').classList.remove('active');
+}
+
+// Выбор категории
+function selectCategory(id, icon, name) {
+    selectedTransferCategory = { id, icon, name };
+    
+    // Обновляем отображение выбранной категории
+    const categoryIcon = document.getElementById('selected-category-icon');
+    const categoryName = document.getElementById('selected-category-name');
+    
+    if (categoryIcon && categoryName) {
+        categoryIcon.textContent = icon;
+        categoryName.textContent = name;
+    }
+    
+    closeCategoryModal();
+    showToast(`Категория: ${name}`);
+}
+
+// ========================================
+// ДЕТАЛИ ТРАНЗАКЦИИ И АВТОПЛАТЕЖИ
+// ========================================
+
+// Данные для отображения в деталях транзакции
+let currentTransactionData = null;
+
+// Открытие деталей транзакции
+function openTransactionDetail(transaction) {
+    currentTransactionData = transaction;
+    
+    // Заполняем данные
+    const amountEl = document.getElementById('detail-amount');
+    const cashbackEl = document.getElementById('detail-cashback');
+    const cashbackAmountEl = document.getElementById('detail-cashback-amount');
+    const categoryIconEl = document.getElementById('detail-category-icon');
+    const categoryNameEl = document.getElementById('detail-category-name');
+    const categoryFullEl = document.getElementById('detail-category-full');
+    const merchantEl = document.getElementById('detail-merchant');
+    const messageEl = document.getElementById('detail-message');
+    const datetimeEl = document.getElementById('detail-datetime');
+    const mccEl = document.getElementById('detail-mcc');
+    const typeEl = document.getElementById('detail-type');
+    
+    const isIncome = transaction.amount < 0;
+    const displayAmount = Math.abs(transaction.amount);
+    
+    if (amountEl) {
+        amountEl.textContent = `${isIncome ? '+' : '-'}${displayAmount.toLocaleString('ru-RU')} ₽`;
+        amountEl.style.color = isIncome ? '#28A745' : 'var(--white)';
+    }
+    
+    // Показываем/скрываем кэшбэк
+    if (cashbackEl) {
+        if (transaction.cashback && transaction.cashback > 0 && !isIncome) {
+            cashbackEl.textContent = `+${transaction.cashback.toLocaleString('ru-RU')} ₽ кэшбэк`;
+            cashbackEl.style.display = 'inline';
+        } else {
+            cashbackEl.style.display = 'none';
+        }
+    }
+    if (cashbackAmountEl) {
+        cashbackAmountEl.textContent = transaction.cashback ? `+${transaction.cashback.toLocaleString('ru-RU')} ₽` : '+0 ₽';
+    }
+    
+    if (categoryIconEl) categoryIconEl.textContent = transaction.category?.icon || '💸';
+    if (categoryNameEl) categoryNameEl.textContent = transaction.category?.name || 'Переводы';
+    if (categoryFullEl) categoryFullEl.textContent = getCategoryFullName(transaction.category?.id);
+    if (merchantEl) merchantEl.textContent = transaction.recipient || 'Мерчант';
+    if (messageEl) messageEl.textContent = transaction.message || (transaction.message === '' ? '—' : '');
+    if (datetimeEl) datetimeEl.textContent = formatTransactionDate(new Date());
+    
+    // MCC и тип операции
+    if (mccEl) mccEl.textContent = isIncome ? 'Не применимо' : '5411';
+    if (typeEl) typeEl.textContent = isIncome ? 'Зачисление' : 'Покупка';
+    
+    // Заполняем данные для автоплатежа
+    if (document.getElementById('autopay-recipient-name')) {
+        document.getElementById('autopay-recipient-name').textContent = transaction.recipient || 'Мерчант';
+    }
+    if (document.getElementById('autopay-recipient-icon')) {
+        document.getElementById('autopay-recipient-icon').textContent = transaction.category?.icon || '💸';
+    }
+    if (document.getElementById('autopay-amount')) {
+        document.getElementById('autopay-amount').value = displayAmount || '';
+    }
+    
+    navigateTo('transaction-detail-screen');
+}
+
+// Получение полного названия категории
+function getCategoryFullName(categoryId) {
+    const names = {
+        transfers: 'Переводы и платежи',
+        education: 'Образование и обучение',
+        family: 'Семья и дети',
+        rent: 'Аренда жилья',
+        gifts: 'Подарки и праздники',
+        charity: 'Благотворительность',
+        services: 'Услуги и сервис',
+        health: 'Здоровье и медицина',
+        beauty: 'Красота и уход',
+        sport: 'Спорт и фитнес',
+        pets: 'Товары для животных',
+        other: 'Другое',
+        food: 'Продукты питания',
+        transport: 'Транспорт и такси',
+        shop: 'Покупки и магазины',
+        utilities: 'ЖКХ и связь',
+        pharmacy: 'Аптеки',
+        entertainment: 'Развлечения'
+    };
+    return names[categoryId] || categoryId;
+}
+
+// Форматирование даты транзакции
+function formatTransactionDate(date) {
+    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day} ${month} ${year}, ${hours}:${minutes}`;
+}
+
+// Открытие модального окна автоплатежа
+function openAutopayModal() {
+    updateAutopayFirstPayment();
+    document.getElementById('autopay-modal').classList.add('active');
+}
+
+// Закрытие модального окна автоплатежа
+function closeAutopayModal() {
+    document.getElementById('autopay-modal').classList.remove('active');
+}
+
+// Обновление даты первого платежа
+function updateAutopayFirstPayment() {
+    const dateSelect = document.getElementById('autopay-date');
+    const frequencyRadios = document.querySelectorAll('input[name="autopay-frequency"]');
+    const firstPaymentEl = document.getElementById('autopay-first-payment');
+    
+    if (!dateSelect || !firstPaymentEl) return;
+    
+    const day = parseInt(dateSelect.value);
+    let isWeekly = false;
+    frequencyRadios.forEach(radio => {
+        if (radio.checked && radio.value === 'week') isWeekly = true;
+    });
+    
+    const now = new Date();
+    const firstPayment = new Date(now);
+    
+    if (isWeekly) {
+        // Раз в неделю - следующий тот же день недели
+        firstPayment.setDate(firstPayment.getDate() + 7);
+    } else {
+        // Раз в месяц
+        firstPayment.setDate(day);
+        if (firstPayment <= now) {
+            firstPayment.setMonth(firstPayment.getMonth() + 1);
+        }
+    }
+    
+    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    firstPaymentEl.textContent = `${firstPayment.getDate()} ${months[firstPayment.getMonth()]} ${firstPayment.getFullYear()}`;
+}
+
+// Сохранение автоплатежа
+function saveAutopay() {
+    const amount = document.getElementById('autopay-amount').value;
+    const frequencyRadios = document.querySelectorAll('input[name="autopay-frequency"]');
+    const dateSelect = document.getElementById('autopay-date');
+    const notifyBefore = document.getElementById('autopay-notify-before').checked;
+    const notifyAfter = document.getElementById('autopay-notify-after').checked;
+    
+    if (!amount || parseInt(amount) <= 0) {
+        showToast('Введите сумму автоплатежа');
+        return;
+    }
+    
+    let frequency = 'month';
+    frequencyRadios.forEach(radio => {
+        if (radio.checked) frequency = radio.value;
+    });
+    
+    const frequencyText = frequency === 'week' ? 'еженедельно' : 'ежемесячно';
+    const dateText = dateSelect.options[dateSelect.selectedIndex].text;
+    
+    closeAutopayModal();
+    showToast(`✅ Автоплатёж настроен: ${frequencyText} ${dateText}`);
+}
+
+// Обработчики для автоплатежа
+document.addEventListener('DOMContentLoaded', function() {
+    const dateSelect = document.getElementById('autopay-date');
+    const frequencyRadios = document.querySelectorAll('input[name="autopay-frequency"]');
+    
+    if (dateSelect) {
+        dateSelect.addEventListener('change', updateAutopayFirstPayment);
+    }
+    
+    frequencyRadios.forEach(radio => {
+        radio.addEventListener('change', updateAutopayFirstPayment);
+    });
+});
+
+// Действия с транзакцией
+function openTransactionActions() {
+    showToast('Действия с операцией');
+}
+
+function shareTransaction() {
+    showToast('📤 Поделиться операцией...');
+}
+
+function downloadReceipt() {
+    showToast('📄 Скачивание чека...');
+}
+
+function reportProblem() {
+    showToast('⚠️ Сообщить о проблеме');
+}
+
 // Подтверждение перевода
 function confirmTransfer() {
     const amountInput = document.getElementById('transfer-amount');
     const messageInput = document.getElementById('transfer-message');
     const recipientName = document.getElementById('transfer-recipient-name').textContent;
-    
+
     const amount = amountInput ? parseInt(amountInput.value) : 0;
-    
+
     if (!amount || amount <= 0) {
         showToast('Введите сумму перевода');
         return;
     }
-    
+
     const message = messageInput ? messageInput.value : '';
-    
+    const category = selectedTransferCategory;
+
     let confirmationMsg = `✅ Перевод ${amount.toLocaleString('ru-RU')} ₽ → ${recipientName}`;
     if (message) {
         confirmationMsg += `\n💬 Сообщение: ${message}`;
     }
-    
+    confirmationMsg += `\n📁 Категория: ${category.name}`;
+
     showToast(confirmationMsg);
-    
+
+    // Добавляем транзакцию в историю с выбранной категорией
+    addTransactionToHistory({
+        recipient: recipientName,
+        amount: amount,
+        message: message,
+        category: category
+    });
+
     // Предлагаем настроить распределение зарплаты при крупном переводе на счёт
     if (amount >= 10000) {
         setTimeout(() => {
@@ -1719,7 +1971,7 @@ function confirmTransfer() {
             }
         }, 1000);
     }
-    
+
     // Возврат на главный экран
     setTimeout(() => {
         navigateTo('home-screen');
@@ -2389,6 +2641,89 @@ document.addEventListener('DOMContentLoaded', function() {
         amountInput.addEventListener('input', updateTransferTotal);
     }
 });
+
+// ========================================
+// ДОБАВЛЕНИЕ ТРАНЗАКЦИИ В ИСТОРИЮ
+// ========================================
+
+/**
+ * Добавляет новую транзакцию в историю операций
+ * @param {Object} transaction - Данные транзакции
+ */
+function addTransactionToHistory(transaction) {
+    const transactionsList = document.querySelector('.transactions-list');
+    if (!transactionsList) return;
+
+    const { recipient, amount, message, category } = transaction;
+    const today = new Date();
+    const dateStr = today.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    const cashback = Math.round(amount * 0.01); // 1% кэшбэк
+
+    // Проверяем, есть ли уже заголовок "Сегодня"
+    let todayHeader = document.querySelector('.transaction-date-header');
+    if (!todayHeader) {
+        todayHeader = document.createElement('div');
+        todayHeader.className = 'transaction-date-header';
+        todayHeader.innerHTML = `<span>Сегодня, ${dateStr}</span>`;
+        transactionsList.insertBefore(todayHeader, transactionsList.firstChild);
+    }
+
+    // Создаём новую транзакцию
+    const newTransaction = document.createElement('div');
+    newTransaction.className = 'transaction-item';
+    newTransaction.onclick = function() { 
+        openTransactionDetail({
+            recipient: recipient,
+            amount: amount,
+            message: message || '',
+            category: category,
+            cashback: cashback
+        });
+    };
+
+    // Определяем иконку и цвет в зависимости от категории
+    const categoryIcons = {
+        transfers: { icon: '💸', class: 'transport-icon' },
+        education: { icon: '📚', class: 'food-icon' },
+        family: { icon: '👨‍👩‍👧', class: 'food-icon' },
+        rent: { icon: '🏠', class: 'utilities-icon' },
+        gifts: { icon: '🎁', class: 'shop-icon' },
+        charity: { icon: '❤️', class: 'food-icon' },
+        services: { icon: '🛠️', class: 'utilities-icon' },
+        health: { icon: '🏥', class: 'pharmacy-icon' },
+        beauty: { icon: '💅', class: 'shop-icon' },
+        sport: { icon: '⚽', class: 'transport-icon' },
+        pets: { icon: '🐾', class: 'food-icon' },
+        other: { icon: '📦', class: 'transport-icon' }
+    };
+
+    const categoryData = categoryIcons[category.id] || categoryIcons.transfers;
+
+    newTransaction.innerHTML = `
+        <div class="transaction-icon ${categoryData.class}">
+            <span style="font-size: 16px;">${categoryData.icon}</span>
+        </div>
+        <div class="transaction-details">
+            <span class="transaction-merchant">${recipient}</span>
+            <span class="transaction-category">${category.name}${message ? ' • ' + message : ''}</span>
+        </div>
+        <div class="transaction-amount">
+            <span class="amount-value">-${amount.toLocaleString('ru-RU')} ₽</span>
+        </div>
+    `;
+
+    // Вставляем после заголовка даты
+    transactionsList.insertBefore(newTransaction, todayHeader.nextSibling);
+
+    // Анимация появления
+    newTransaction.style.opacity = '0';
+    newTransaction.style.transform = 'translateX(-20px)';
+    setTimeout(() => {
+        newTransaction.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        newTransaction.style.opacity = '1';
+        newTransaction.style.transform = 'translateX(0)';
+    }, 10);
+}
 
 console.log('%c ОТП Банк Онлайн ', 'background: #C1FF05; color: #000; font-size: 16px; font-weight: bold; padding: 8px 16px; border-radius: 4px;');
 console.log('%c Версия приложения: 2.0.0 (Светлая тема) ', 'color: #8C8C8C; font-size: 12px;');
